@@ -1,6 +1,6 @@
 #include "transform.h"
 
-Transform* createTransform(int x, int y, int width, int height) {
+Transform* createTransform(float x, float y, int width, int height) {
     Transform* transform = (Transform*)malloc(sizeof(Transform));
     transform->x = x;
     transform->y = y;

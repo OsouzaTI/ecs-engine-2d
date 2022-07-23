@@ -10,7 +10,7 @@ typedef struct player
     Sprite2D* sprite2d;
 } Player;
 
-Player* createPlayer(Display* display, int x, int y, int width, int height, const char* filePath);
+Player* createPlayer(Display* display, float x, float y, int width, int height, const char* filePath);
 void renderPlayer(Display* display, Player* player);
 
 #endif

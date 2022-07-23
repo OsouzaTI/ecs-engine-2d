@@ -6,13 +6,13 @@
 
 typedef struct transform
 {
-    int x;
-    int y;
+    float x;
+    float y;
     int width;
     int height;
 } Transform;
 
-Transform* createTransform(int x, int y, int width, int height);
+Transform* createTransform(float x, float y, int width, int height);
 void destroyTransform(Transform** transform);
 
 #endif
