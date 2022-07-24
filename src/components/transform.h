@@ -13,6 +13,6 @@ typedef struct transform
 } Transform;
 
 Transform* createTransform(float x, float y, int width, int height);
-void destroyTransform(Transform** transform);
+void destroyTransform(Transform* transform);
 
 #endif

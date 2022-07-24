@@ -9,7 +9,7 @@ Transform* createTransform(float x, float y, int width, int height) {
     return transform;
 }
 
-void destroyTransform(Transform** transform) {
-    free(*transform);
-    (*transform) = NULL;
+void destroyTransform(Transform* transform) {
+    free(transform);
+    transform = NULL;
 }

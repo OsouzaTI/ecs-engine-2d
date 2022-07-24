@@ -18,6 +18,6 @@ typedef struct sprite2d
 Sprite2D* createSprite2D(Display* display, const char* filePath, Transform* transform);
 void setRotationSprite2D(Sprite2D* sprite2d, float angle);
 void renderSprite2D(Display* display, Sprite2D* sprite2d);
-void destroySprite2D(Sprite2D** sprite2d);
+void destroySprite2D(Sprite2D* sprite2D);
 
 #endif

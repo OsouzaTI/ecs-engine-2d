@@ -4,7 +4,9 @@ build:
 	-std=c99 \
 	./src/components/* \
 	./src/core/* \
-	./src/helpers/* \
+	./src/helpers/*.h \
+	./src/helpers/*.c \
+	./src/helpers/scene/* \
 	./src/objects/* \
 	./src/main.c \
 	-I"src" \

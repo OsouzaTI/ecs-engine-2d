@@ -3,12 +3,21 @@
 Display* createDisplay(SDL_Color* defaulClearColor) {
     Display* display = (Display*)malloc(sizeof(Display));
     display->run = 0;
+    display->size = (Vector2D){0, 0};
     display->renderer = NULL;
     display->window = NULL;
-    display->clearColor = (SDL_Color){255, 255, 255, 255};
+
+    if(NOTNULL(defaulClearColor)){
+        display->clearColor = (SDL_Color){
+            defaulClearColor->r, defaulClearColor->g,
+            defaulClearColor->b, defaulClearColor->a
+        };
+    } else {
+        display->clearColor = (SDL_Color){255, 255, 255, 255};
+    }
 
     // frame rate fix
-    display->frameRate = 60;
+    display->frameRate = 60 / 1000.0f;
     display->previousFrameTime = 0;
     display->deltaTime = 0.0f;
     return display;
@@ -41,7 +50,7 @@ Display* initScreen(const char* title, int width, int height) {
 
     logInfo("SDL inicializado");    
 
-    Display* display = (Display*)malloc(sizeof(Display));
+    Display* display = createDisplay(NULL);
     display->size = (Vector2D){ width, height };
 
     display->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
@@ -76,9 +85,10 @@ int input(Display* display, InputCallbackEvent inputCallback){
 }
 
 
-void update(Display* display) {
+void update(Display* display, UpdateCallbackEvent updateCallback) {
     _fixFrameRate(display);
     _updateMousePosition(display);
+    updateCallback(display);
 }
 
 

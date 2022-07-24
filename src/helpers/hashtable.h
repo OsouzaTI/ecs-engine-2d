@@ -9,6 +9,7 @@
 typedef struct hashNode {
     char key[255];
     char* value;
+    void* data;
 } HashNode;
 
 typedef struct hashtable
@@ -23,8 +24,10 @@ typedef struct hashtable
 
 HashTable* createHashTable(int N);
 void rehashing(HashTable** hashtable);
+void rehashingGenericNodes(HashTable** hashtable);
 void freeHashTable(HashTable* hashtable);
 void addHashNode(HashTable** hashTable, const char* key, const char* value);
+void addGenericHashNode(HashTable** hashTable, const char* key, void* data);
 HashNode* findHashNode(HashTable* hashTable,const char* key);
 void printHashTable(HashTable* hashTable);
 

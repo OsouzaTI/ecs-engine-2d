@@ -4,6 +4,8 @@ BoxCollider2D* createBoxCollider2D(Transform* transform) {
     BoxCollider2D* boxcollider2D = (BoxCollider2D*)malloc(sizeof(BoxCollider2D));
     boxcollider2D->transform = transform;
     boxcollider2D->scale = 1;
+    boxcollider2D->color = (SDL_Color){0, 255, 0, 255};
+    return boxcollider2D;
 }
 
 void updateBoxCollider2D(BoxCollider2D* boxcollider2D) {
@@ -20,12 +22,29 @@ void updateBoxCollider2D(BoxCollider2D* boxcollider2D) {
     }
 }
 
-void renderBoxCollider2D(Display* display, BoxCollider2D* boxcollider2D, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
-    setClearColor(display, r, g, b, a);
+void destroyBoxCollider2D(BoxCollider2D* boxcollider2D) {
+    // transform sera destruido pelo destroyObject...
+    boxcollider2D->transform = NULL;
+}
+
+void renderBoxCollider2D(Display* display, BoxCollider2D* boxcollider2D) {
+    SDL_Color* boxColor = &boxcollider2D->color;
+    setClearColor(display, boxColor->r, boxColor->g, boxColor->b, boxColor->a);
     SDL_RenderDrawRect(display->renderer, &boxcollider2D->rect);
 }
 
+void setBoxCollider2DColor(BoxCollider2D* boxcollider2D, uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
+    SDL_Color* boxColor = &boxcollider2D->color;
+    boxColor->r = r;
+    boxColor->g = g;
+    boxColor->b = b;
+    boxColor->a = a;
+}
+
 int boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
+    if(ISNULL(a)||ISNULL(b)) 
+        return 0;
+        
     int ax = a->rect.x;
     int ay = a->rect.y;
     int bx = b->rect.x;

@@ -12,7 +12,7 @@ void addAsset(const char* key, const char* file) {
 }
 
 char* getAsset(const char* key) {
-    HashNode* hashNode = findHashNode(assets, "nave");    
+    HashNode* hashNode = findHashNode(assets, key);    
     if(NOTNULL(hashNode))
         return hashNode->value;
     return NULL;

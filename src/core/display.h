@@ -34,7 +34,7 @@ typedef struct display {
  * @param defaulClearColor 
  * @return Display* 
  */
-Display* createDisplay();
+Display* createDisplay(SDL_Color* defaulClearColor);
 
 /**
  * @brief Desaloca memoria previamente disponibilizada
@@ -67,7 +67,7 @@ int input(Display* display, InputCallbackEvent inputCallback);
  * ou objetos de configuração
  * @param display 
  */
-void update(Display* display);
+void update(Display* display, UpdateCallbackEvent updateCallback);
 
 /**
  * @brief Chama todas as funções necessárias

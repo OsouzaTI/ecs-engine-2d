@@ -16,11 +16,13 @@ void setRotationSprite2D(Sprite2D* sprite2d, float angle) {
     sprite2d->angle = angle;
 }
 
-void renderSprite2D(Display* display, Sprite2D* sprite2d) {
-    renderTexture(display, sprite2d->texture, sprite2d->srcRect, sprite2d->dstRect, sprite2d->angle, 0);
+void renderSprite2D(Display* display, Sprite2D* sprite2D) {
+    renderTexture(display, sprite2D->texture, sprite2D->srcRect, sprite2D->dstRect, sprite2D->angle, 0);
 }
 
-void destroySprite2D(Sprite2D** sprite2d) {
-    SDL_DestroyTexture((*sprite2d)->texture);
-    free(*sprite2d);
+void destroySprite2D(Sprite2D* sprite2D) {
+    SDL_DestroyTexture(sprite2D->texture);
+    sprite2D->texture = NULL;
+    sprite2D->transform = NULL;
+    free(sprite2D);
 }
