@@ -3,7 +3,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include "hashtable.h"
+#include <helpers/hashtable.h>
 
 extern const char* ASSETS_PATH;
 extern HashTable* assets;

@@ -6,6 +6,11 @@ Display* createDisplay(SDL_Color* defaulClearColor) {
     display->renderer = NULL;
     display->window = NULL;
     display->clearColor = (SDL_Color){255, 255, 255, 255};
+
+    // frame rate fix
+    display->frameRate = 60;
+    display->previousFrameTime = 0;
+    display->deltaTime = 0.0f;
     return display;
 }
 
@@ -37,6 +42,7 @@ Display* initScreen(const char* title, int width, int height) {
     logInfo("SDL inicializado");    
 
     Display* display = (Display*)malloc(sizeof(Display));
+    display->size = (Vector2D){ width, height };
 
     display->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
     if(display->window == NULL) {
@@ -58,20 +64,21 @@ Display* initScreen(const char* title, int width, int height) {
 
 
 // Game loop
-int input(Display* display) {
+int input(Display* display, InputCallbackEvent inputCallback){
     SDL_Event* event = &display->event;
     if(SDL_PollEvent(event)) 
     {
-        printf("event: %d\n", event->type);
+        // printf("event: %d\n", event->type);
         if(event->type == SDL_QUIT)
-            display->run = 0; // quebra o game loop e termina a excucao do programa
-
+            display->run = 0;
+        inputCallback(event);
     }
 }
 
 
 void update(Display* display) {
-
+    _fixFrameRate(display);
+    _updateMousePosition(display);
 }
 
 
@@ -91,4 +98,21 @@ void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
     display->clearColor.a = a;
     SDL_Color* clearColor = &display->clearColor;
     SDL_SetRenderDrawColor(display->renderer, clearColor->r, clearColor->g, clearColor->b, clearColor->a);
+}
+
+void _updateMousePosition(Display* display) {
+    int mouse_x, mouse_y;
+    SDL_GetMouseState(&mouse_x, &mouse_y);
+    // posicao anterior
+    display->mouse.oldPosition.x = display->mouse.position.x;
+    display->mouse.oldPosition.y = display->mouse.position.y;
+    // posicao atual
+    display->mouse.position.x = mouse_x;
+    display->mouse.position.y = mouse_y;
+}
+
+void _fixFrameRate(Display* display) {
+    while (!SDL_TICKS_PASSED(SDL_GetTicks(), display->previousFrameTime + display->frameRate));
+    display->deltaTime = (SDL_GetTicks() - display->previousFrameTime) / 1000.0f;
+    display->previousFrameTime = SDL_GetTicks();
 }

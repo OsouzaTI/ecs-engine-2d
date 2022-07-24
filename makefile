@@ -2,7 +2,12 @@ build:
 	gcc \
 	-Wfatal-errors \
 	-std=c99 \
-	./src/* \
+	./src/components/* \
+	./src/core/* \
+	./src/helpers/* \
+	./src/objects/* \
+	./src/main.c \
+	-I"src" \
 	-I"C:\libsdl\include" \
 	-L"C:\libsdl\lib" \
 	-lmingw32 \

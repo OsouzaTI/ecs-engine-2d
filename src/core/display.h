@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <core/constants.h>
+#include <helpers/vector2d.h>
+#include <helpers/mouse.h>
 #include "log.h"
 
 // tipos de retornos possiveis da funcao input
@@ -15,6 +18,13 @@ typedef struct display {
     SDL_Renderer* renderer;
     SDL_Event event;
     SDL_Color clearColor;
+    Vector2D size;
+    Mouse mouse;
+
+    // frame rate fix
+    float frameRate;
+    int previousFrameTime;
+    float deltaTime;
 } Display;
 
 /**
@@ -50,7 +60,7 @@ Display* initScreen(const char* title, int width, int height);
  * @param display 
  * @return int 
  */
-int input(Display* display);
+int input(Display* display, InputCallbackEvent inputCallback);
 
 /**
  * @brief Atualiza todos os objetos em cena
@@ -76,4 +86,6 @@ void clearScreen(Display* display);
 //------> helpers
 void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 
+void _updateMousePosition(Display* display);
+void _fixFrameRate(Display* display);
 #endif
