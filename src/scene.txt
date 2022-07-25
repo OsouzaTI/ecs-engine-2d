@@ -1,5 +1,5 @@
 -- assets
-
+ASSET_PATH /home/csi/Documentos/analise_algoritmos/space-game/assets
 ASSET naveA Spaceships\\Spaceship#01(24x24).png
 ASSET naveB Spaceships\\Spaceship#02(24x24).png
 ASSET blockA blocks\\mario_brick.png

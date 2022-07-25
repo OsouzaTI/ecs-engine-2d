@@ -1,13 +1,22 @@
 #include "assets.h"
 
-const char* ASSETS_PATH = "C:\\Users\\osouza\\OneDrive\\Documentos\\UFRR\\6 semestre\\analise_algoritmos\\trabalho_final\\assets";
+char ASSETS_PATH_SEPARATOR[2];
+char ASSETS_PATH[255];
 // iniciando a tabela de assets com 200 de tamanho
 HashTable* assets = NULL;
 
+void setAssetPathSeparator(const char* pathSeparator) {
+    strcpy(ASSETS_PATH_SEPARATOR, pathSeparator);
+}
+
+void setAssetPath(const char* path) {
+    strcpy(ASSETS_PATH, path);
+}
+
 void addAsset(const char* key, const char* file) {
     if(assets == NULL) assets = createHashTable(10);
-    char buffer[255];
-    sprintf(buffer, "%s\\%s", ASSETS_PATH, file);
+    char buffer[1024];
+    sprintf(buffer, "%s%s%s", ASSETS_PATH, ASSETS_PATH_SEPARATOR, file);
     addHashNode(&assets, key, buffer);
 }
 

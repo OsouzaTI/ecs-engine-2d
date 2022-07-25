@@ -24,8 +24,16 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
         // adicionando asset ao projeto
         if (strcmp(buffer, "ASSET") == 0) {
             char name[255], path[255];
-            fscanf(file, "%s %s", &name, &path);
+            fscanf(file, "%s %s", name, path);
             addAsset(name, path);
+        } else if(strcmp(buffer, "ASSET_PATH") == 0) {
+            char path[255];
+            fscanf(file, "%s", path);
+            setAssetPath(path);
+        } else if(strcmp(buffer, "ASSET_PATH_SEPARATOR") == 0) {
+            char separator[2];
+            fscanf(file, "%s", separator);
+            setAssetPathSeparator(separator);
         } else if(strcmp(buffer, "MAP_START") == 0) {
             
             // helpers
@@ -43,10 +51,10 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                     ObjectSceneLoader objectSceneLoader;
                     fscanf(file,
                         "%s %d %d %s",
-                        &key, 
+                        key, 
                         &objectSceneLoader.hasBoxCollider2D,
                         &objectSceneLoader.renderBoxCollider2D,
-                        &objectSceneLoader.spriteName
+                        objectSceneLoader.spriteName
                     );
                     addGenericHashNode(&objects, key, (void*)&objectSceneLoader);
                 } else if(strncmp(buffer, "*", 1) == 0){

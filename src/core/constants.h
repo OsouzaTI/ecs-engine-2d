@@ -3,6 +3,9 @@
 
 #include <SDL2/SDL.h>
 
+// Algumas definiçoes matematicas
+# define M_PI		3.14159265358979323846	/* pi */
+
 #define ISNULL(x) (x == NULL)
 #define NOTNULL(x) !ISNULL(x)
 #define DEGTORAD(x) (x/180) * M_PI
