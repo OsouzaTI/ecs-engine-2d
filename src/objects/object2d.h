@@ -49,7 +49,7 @@ BoxCollider2D* getBoxCollider2DFromObject2D(Object2D* object2D);
 Transform* getTransformFromObject2D(Object2D* object2D);
 // positions
 void setObject2DPosition(Object2D* object2D, float x, float y);
-
+void setObject2DSize(Object2D* object2D, float x, float y);
 // destroy
 void destroyObject2D(Object2D* object2D);
 

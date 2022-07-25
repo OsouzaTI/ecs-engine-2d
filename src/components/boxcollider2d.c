@@ -16,16 +16,19 @@ BoxCollider2D* createBoxCollider2D(Transform* transform) {
 }
 
 void updateBoxCollider2D(BoxCollider2D* boxcollider2D) {
-    Transform* tf = boxcollider2D->transform;
+    Transform* tfBoxCollide2D = boxcollider2D->transform;
+    Vector2D* tfPos = getTransformPosition(tfBoxCollide2D);
+    Vector2D* tfSize = getTransformSize(tfBoxCollide2D);
+
     float scale = boxcollider2D->scale;
-    boxcollider2D->rect.w = (int)(tf->width * scale);
-    boxcollider2D->rect.h = (int)(tf->height * scale);
+    boxcollider2D->rect.w = (int)(tfSize->x * scale);
+    boxcollider2D->rect.h = (int)(tfSize->y * scale);
     if(scale > 1) {
-        boxcollider2D->rect.x = (int)(tf->x - (tf->width *  .25f));
-        boxcollider2D->rect.y = (int)(tf->y - (tf->height * .25f));
+        boxcollider2D->rect.x = (int)(tfPos->x - (tfSize->x *  .25f));
+        boxcollider2D->rect.y = (int)(tfPos->y - (tfSize->y * .25f));
     } else {
-        boxcollider2D->rect.x = (int)tf->x;
-        boxcollider2D->rect.y = (int)tf->y;
+        boxcollider2D->rect.x = (int)tfPos->x;
+        boxcollider2D->rect.y = (int)tfPos->y;
     }
 
 }
@@ -69,13 +72,21 @@ void setBoxCollider2DTagCollisionWith(BoxCollider2D* boxcollider2D, CollisionTag
     boxcollider2D->collisionTags[tag] = value;
 }
 
-int boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
+Transform* getBoxCollider2DTransform(BoxCollider2D* boxcollider2D) {
+    return boxcollider2D->transform;
+}
+
+CollisionEvent boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
+    CollisionEvent collisionEvent = {
+        .hasCollision = 0,
+    };
+
     if(ISNULL(a)||ISNULL(b)) {
-        return 0;
+        return collisionEvent;
     }
 
     if(!a->collisionTags[b->tag]) {
-        return 0;
+        return collisionEvent;
     }
 
     int ax = a->rect.x;
@@ -90,7 +101,33 @@ int boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
     int ayh = ay + ah;
     int bxw = bx + bw;
     int byh = by + bh;
-    if(axw > bx && ayh > by && ax < bxw && ay < byh) 
-        return 1;
-    return 0;
+
+    Vector2D normal;
+    int offset = 2;
+    if(axw > bx && ayh > by && ax < bxw && ay < byh) {
+        // existe colisao
+        collisionEvent.hasCollision = 1;
+
+        // verificando vetor normal
+        if(axw - offset < bx) {
+            normal.x = -1;
+        } else if(ax + offset > bxw) {
+            normal.x = 1;
+        } else {
+            normal.x = 0;
+        }
+        
+        if(ayh - offset < by) {
+            normal.y = 1;
+        } else if(ay + offset > byh) {
+            normal.y = -1;
+        } else {
+            normal.y = 0;
+        }
+
+        collisionEvent.normal = normal;
+        return collisionEvent;
+    }
+
+    return collisionEvent;
 }

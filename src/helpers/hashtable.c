@@ -146,7 +146,7 @@ HashNode* findHashNode(HashTable* hashTable,const char* key){
 void printHashTable(HashTable* hashTable) {
     for (int i = 0; i < hashTable->N; i++){
         if(hashTable->data[i] != NULL)
-            printf("[%d]: %s | %s\n", i, hashTable->data[i]->key, hashTable->data[i]->value);
+            printf("[%d]: %s | %s | %p\n", i, hashTable->data[i]->key, hashTable->data[i]->value , hashTable->data[i]->data);
         else
             printf("[%d]: NULL\n", i);
     }

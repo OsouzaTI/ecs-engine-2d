@@ -23,8 +23,20 @@ float dotProductVector2D(Vector2D* u, Vector2D* v) {
 }
 
 Vector2D* rotateVector2D(Vector2D* u, float angle) {
-    float radAngle = angle/180 * 3.141516;
     u->x = u->x * cos(angle) - u->y * sin(angle);
     u->y = u->x * sin(angle) - u->y * cos(angle);
     return u;
+}
+
+// helpers
+void setVector2D(Vector2D* u, float x, float y) {
+    u->x = x;
+    u->y = y;
+}
+
+Vector2D cloneVector2D(Vector2D* u) {
+    return (Vector2D) {
+        .x = u->x,
+        .y = u->y
+    };
 }

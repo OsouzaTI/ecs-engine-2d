@@ -50,8 +50,11 @@ Transform* getTransformFromObject2D(Object2D* object2D) {
 //----------------------------------
 
 void setObject2DPosition(Object2D* object2D, float x, float y) {
-    object2D->Components.transform->x = x;
-    object2D->Components.transform->y = y;
+    setTransformPosition(getTransformFromObject2D(object2D), x, y);
+}
+
+void setObject2DSize(Object2D* object2D, float x, float y) {
+    setTransformSize(getTransformFromObject2D(object2D), x, y);
 }
 
 // destroy
@@ -78,10 +81,12 @@ void destroyObject2D(Object2D* object2D) {
 void renderObject2D(Display* display, Object2D* object2D) {
     Sprite2D* object2DSprite = object2D->Components.sprite2d;
     Transform* transform = getTransformFromObject2D(object2D);
-    object2DSprite->dstRect.x = (int)transform->x;
-    object2DSprite->dstRect.y = (int)transform->y;
-    object2DSprite->dstRect.w = transform->width;
-    object2DSprite->dstRect.h = transform->height;
+    Vector2D* tfPos = getTransformPosition(transform);
+    Vector2D* tfSize = getTransformSize(transform);
+    object2DSprite->dstRect.x = (int)tfPos->x;
+    object2DSprite->dstRect.y = (int)tfPos->y;
+    object2DSprite->dstRect.w = tfSize->x;
+    object2DSprite->dstRect.h = tfSize->y;
     renderSprite2D(display, object2DSprite);
     if(object2D->renderCollider) {
         renderBoxCollider2D(display, getBoxCollider2DFromObject2D(object2D));

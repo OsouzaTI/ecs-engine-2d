@@ -54,8 +54,8 @@ void ballUpdate(Object2D* ball, Display* display) {
 
 void ballCollision(Object2D* ball, Object2D* trigged) {
     Transform* transform = getTransformFromObject2D(ball);
-    transform->angle = (rand()%300 + 10);
-    // multiplyVector2DByScalar(&transform->direction, -1);
+    // transform->angle = (rand()%300 + 10);
+    multiplyVector2DByScalar(&transform->direction, -1);
     // multiplyVector2DByScalar(&transform->velocity, -1);
     setBoxCollider2DColor(getBoxCollider2DFromObject2D(trigged), 255, 0, 0, 255);
 }
@@ -77,8 +77,9 @@ int main(int argc, char *argv[]) {
     setBoxCollider2D(ball);
     setBoxCollider2DTag(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_1);
     setBoxCollider2DTagCollisionWith(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_0, COLLISION_ENABLED);
-    setTransformDirection(getTransformFromObject2D(ball), 1, 0);
-    setTransformVelocity(getTransformFromObject2D(ball), 0.5f, 0);
+    setBoxCollider2DTagCollisionWith(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_2, COLLISION_ENABLED);
+    setTransformDirection(getTransformFromObject2D(ball), 0, -1);
+    setTransformVelocity(getTransformFromObject2D(ball), 0, 0.5f);
     setTransformAngle(getTransformFromObject2D(ball), 0.0f);
 
     setSpriteObject2D(display, ball, getAsset("ball"));

@@ -66,8 +66,10 @@ Object2D* _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* o
     forEach(object, objectManager->objects) {
         Object2D* objectTest = (Object2D*)object->data;
         BoxCollider2D* boxA = object2D->Components.boxcollider2D;
-        BoxCollider2D* boxB = objectTest->Components.boxcollider2D;        
-        if((object2D != objectTest) && boxCollision2D(boxA, boxB)){
+        BoxCollider2D* boxB = objectTest->Components.boxcollider2D;  
+        CollisionEvent collisionEvent = boxCollision2D(boxA, boxB); 
+        if((object2D != objectTest) && collisionEvent.hasCollision){
+            printf("Vetor Normal: V(%f, %f)\n", collisionEvent.normal.x, collisionEvent.normal.y);
             return objectTest;
         }
     }
