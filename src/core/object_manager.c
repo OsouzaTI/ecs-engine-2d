@@ -36,6 +36,11 @@ void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
         {
             case OBJECT2D:{
                 Object2D* object2D = (Object2D*)object->data;   
+
+                if(NOTNULL(object2D->Components.transform)) {
+                    updateTransform(display, getTransformFromObject2D(object2D));
+                }
+
                 if(NOTNULL(object2D->Components.boxcollider2D)) {
                     updateBoxCollider2D(getBoxCollider2DFromObject2D(object2D));
                 }

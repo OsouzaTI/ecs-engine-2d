@@ -122,11 +122,25 @@ void addGenericHashNode(HashTable** hashTable, const char* key, void* data) {
 }
 
 HashNode* findHashNode(HashTable* hashTable,const char* key){
-    int code = stringHash(key, hashTable->N);
-    HashNode* hashNode = hashTable->data[code];
-    if(ISNULL(hashNode))
+    int code = stringHash(key, hashTable->N);    
+    HashNode* hashNode = hashTable->data[code];  
+    if(ISNULL(hashNode)) {
         return NULL;
-    return hashNode;        
+    } 
+    
+    if(strcmp(key, hashNode->key) != 0) {
+        for (int i = code+1; i <= hashTable->size; i++)
+        {
+            hashNode = hashTable->data[i];
+            if(strcmp(key, hashNode->key) == 0){
+                return hashNode;
+            }
+        }        
+    } else {
+        return hashNode;        
+    }
+
+    return NULL;
 }
 
 void printHashTable(HashTable* hashTable) {

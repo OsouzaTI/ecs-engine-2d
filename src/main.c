@@ -23,29 +23,41 @@ void updateCallback(Display* display) {
 }
 
 float radius = 100, degrees = 0;
-void playerUpdate(Object2D* player, Display* display) {
 
-    player->renderCollider = 1;
-    setBoxCollider2DColor(getBoxCollider2DFromObject2D(player), 0, 255, 0, 255);
+// void ballUpdate(Object2D* player, Display* display) {
 
-    setObject2DPosition(player,
-        display->mouse.position.x + radius * cos(degrees),
-        display->mouse.position.y + radius * sin(degrees)
-    );
+//     player->renderCollider = 1;
+//     setBoxCollider2DColor(getBoxCollider2DFromObject2D(player), 0, 255, 0, 255);
 
-    degrees+=0.001;
+//     setObject2DPosition(player,
+//         display->mouse.position.x + radius * cos(degrees),
+//         display->mouse.position.y + radius * sin(degrees)
+//     );
 
-    // teste de rotacao
-    Transform* playerTransform = getTransformFromObject2D(player);
-    float dx = playerTransform->x - display->mouse.position.x;
-    float dy = playerTransform->y - display->mouse.position.y;       
-    float angle = -atan2(dx, dy) * 180 / M_PI;
-    setRotationSprite2D(getSprite2DFromObject2D(player), angle);
+//     degrees+=0.001;
+
+//     // teste de rotacao
+//     Transform* playerTransform = getTransformFromObject2D(player);
+//     float dx = playerTransform->x - display->mouse.position.x;
+//     float dy = playerTransform->y - display->mouse.position.y;       
+//     float angle = -atan2(dx, dy) * 180 / M_PI;
+//     setRotationSprite2D(getSprite2DFromObject2D(player), angle);
+// }
+
+void ballUpdate(Object2D* ball, Display* display) {
+    // degrees+=0.001;
+    // setObject2DPosition(ball,
+    //     display->mouse.position.x + 10 * cos(degrees),
+    //     display->mouse.position.y + 10 * sin(degrees)
+    // );
 }
 
-void playerCollision(Object2D* player, Object2D* trigged) {
-    // printf("Triggered Object ID: %d\n", trigged->objectId);
-    setBoxCollider2DColor(getBoxCollider2DFromObject2D(player), 255, 0, 0, 255);
+void ballCollision(Object2D* ball, Object2D* trigged) {
+    Transform* transform = getTransformFromObject2D(ball);
+    transform->angle = (rand()%300 + 10);
+    // multiplyVector2DByScalar(&transform->direction, -1);
+    // multiplyVector2DByScalar(&transform->velocity, -1);
+    setBoxCollider2DColor(getBoxCollider2DFromObject2D(trigged), 255, 0, 0, 255);
 }
 
 void ratUpdate(Object2D* rat, Display* display) {
@@ -58,6 +70,21 @@ int main(int argc, char *argv[]) {
     ObjectManager* objectManager = createObjectManager();
     
     sceneLoader(objectManager, display, "scene.txt"); 
+    
+    printHashTable(assets);
+
+    Object2D* ball = createObject2D(display, 80, 80, 16, 16);
+    setBoxCollider2D(ball);
+    setBoxCollider2DTag(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_1);
+    setBoxCollider2DTagCollisionWith(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_0, COLLISION_ENABLED);
+    setTransformDirection(getTransformFromObject2D(ball), 1, 0);
+    setTransformVelocity(getTransformFromObject2D(ball), 0.5f, 0);
+    setTransformAngle(getTransformFromObject2D(ball), 0.0f);
+
+    setSpriteObject2D(display, ball, getAsset("ball"));
+    setObject2DUpdateCallback(ball, ballUpdate);
+    setObjectBoxCollision2DEvent(ball, ballCollision);
+    addObject2DToManager(objectManager, ball);
     
     while(display->run) {
         // cor de fundo

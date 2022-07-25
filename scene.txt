@@ -3,6 +3,7 @@
 ASSET naveA Spaceships\\Spaceship#01(24x24).png
 ASSET naveB Spaceships\\Spaceship#02(24x24).png
 ASSET blockA blocks\\mario_brick.png
+ASSET ball blocks\\ball_16x16.png
 
 -- mapa
 
