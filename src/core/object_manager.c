@@ -1,7 +1,8 @@
 #include "object_manager.h"
 
-ObjectManager* createObjectManager() {
+ObjectManager* createObjectManager(Display* display) {
     ObjectManager* objectManager = (ObjectManager*)malloc(sizeof(ObjectManager));
+    objectManager->display = display;
     objectManager->objects = createLinkedList();
     return objectManager;
 }
@@ -15,13 +16,13 @@ void addObject2DToManager(ObjectManager* objectManager, Object2D* object2D) {
     addObjectToManager(objectManager, (void*)object2D);
 }
 
-void renderAllObjectsInManager(Display* display, ObjectManager* objectManager){
+void renderAllObjectsInManager(ObjectManager* objectManager){
     forEach(object, objectManager->objects){
         Object* _obj = (Object*)object->data;
         switch (_obj->_objectType)
         {
             case OBJECT2D:
-                renderObject2D(display, (Object2D*)object->data);
+                renderObject2D(objectManager->display, (Object2D*)object->data);
                 break;            
             default:
                 break;
@@ -29,7 +30,7 @@ void renderAllObjectsInManager(Display* display, ObjectManager* objectManager){
     }
 }
 
-void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
+void updateAllObjectsInManager(ObjectManager* objectManager) {
     forEach(object, objectManager->objects){
         Object* _obj = (Object*)object->data;
         switch (_obj->_objectType)
@@ -38,7 +39,7 @@ void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
                 Object2D* object2D = (Object2D*)object->data;   
 
                 if(NOTNULL(object2D->Components.transform)) {
-                    updateTransform(display, getTransformFromObject2D(object2D));
+                    updateTransform(objectManager->display, getTransformFromObject2D(object2D));
                 }
 
                 if(NOTNULL(object2D->Components.boxcollider2D)) {
@@ -46,7 +47,7 @@ void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
                 }
 
                 if(NOTNULL(object2D->Events.update)) {
-                    (object2D->Events.update)(object2D, display);
+                    (object2D->Events.update)(object2D, objectManager->display);
                 }
 
                 if(NOTNULL(object2D->Events.boxCollision2DEvent)) {
@@ -60,6 +61,16 @@ void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
                 break;
         }
     }
+}
+
+Object2D* getObject2DByTokenIdentifier(ObjectManager* objectManager, char* tokenIdentifier) {
+    forEach(object, objectManager->objects) {
+        Object2D* objectTest = (Object2D*)object->data;
+        if(strcmp(objectTest->tokenIdentifier, tokenIdentifier) == 0){
+            return objectTest;
+        }
+    }
+    return NULL;
 }
 
 CollisionEvent _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D) {

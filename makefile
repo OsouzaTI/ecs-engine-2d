@@ -8,11 +8,12 @@ build:
 	./src/helpers/*.c \
 	./src/helpers/scene/* \
 	./src/objects/* \
+	./src/rato.h \
 	./src/main.c \
 	-I"src" \
 	-I"C:\libsdl\include" \
 	-L"C:\libsdl\lib" \
-	-lmingw32 \
+	-lm \
 	-lSDL2main \
 	-lSDL2 \
 	-lSDL2_ttf \
@@ -21,4 +22,4 @@ build:
 	-o build
 
 run:
-	build.exe
+	./build

@@ -6,6 +6,7 @@ ObjectSceneLoader* createObjectSceneLoader() {
     objectSceneLoader->hasSize = 0;
     objectSceneLoader->hasPosition = 0;
     objectSceneLoader->hasBoxCollider2D = 0;
+    objectSceneLoader->hasTokenIdentifier = 0;
 
     objectSceneLoader->collisionTag = COLLISION_TAG_0;
     objectSceneLoader->renderBoxCollider2D = 0; 
@@ -45,12 +46,19 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
     Vector2D* size = &objectSceneLoader->size;
     Vector2D* pos = &objectSceneLoader->position;
 
+    // definindo tamanho
     if(objectSceneLoader->hasSize){
         setObject2DSize(object2D, size->x, size->y);
     }
 
+    // definindo posicao inicial
     if(objectSceneLoader->hasPosition) {
         setObject2DPosition(object2D, size->x * pos->x, size->y * pos->y);
+    }
+
+    // definindo token de identificação
+    if(objectSceneLoader->hasTokenIdentifier) {
+        setObject2DTokenIdentifier(object2D, objectSceneLoader->tokenIdentifier);
     }
 
 }
@@ -125,6 +133,9 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                             fscanf(file, "%f %f", &x, &y);
                             setVector2D(&objectSceneLoader->position, x, y);
                             objectSceneLoader->hasPosition = 1;
+                        } else if(strcmp(buffer, ">_TOKEN_IDENTIFIER") == 0) {
+                            fscanf(file, "%s", objectSceneLoader->tokenIdentifier);
+                            objectSceneLoader->hasTokenIdentifier = 1;
                         } else if(strcmp(buffer, ">_COLLISION_TAG") == 0){
                             fscanf(file, "%d", &objectSceneLoader->collisionTag);
                         } else if(strcmp(buffer, ">_COLLISION_TAGS") == 0) {
@@ -172,7 +183,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                     if(NOTNULL(node)){
                         ObjectSceneLoader* objectSceneLoader = (ObjectSceneLoader*)node->data;
                         Object2D* object2D = createObject2D(display, SIZE * i, SIZE * line, SIZE, SIZE);                    
-                        printObjectSceneLoader(objectSceneLoader);
+                        // printObjectSceneLoader(objectSceneLoader);
                         objectSceneLoaderBindWithObject2D(display, objectSceneLoader, object2D);
                         addObject2DToManager(objectManager, object2D);
                     }                     

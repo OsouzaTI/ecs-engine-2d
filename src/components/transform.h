@@ -7,6 +7,18 @@
 #include <core/display.h>
 #include <helpers/vector2d.h>
 
+#define TFSSIZE(x, y, z)  setTransformSize(x, y, z)
+#define TFSPOS(x, y, z)   setTransformPosition(x, y, z)
+#define TFSVEL(x, y, z)   setTransformVelocity(x, y, z)
+#define TFSDIR(x, y, z)   setTransformDirection(x, y, z)
+#define TFSANG(x, y, z)   setTransformAngle(x, y, z)
+
+#define TFGSIZE(x)  getTransformSize(x)
+#define TFGPOS(x)   getTransformPosition(x)
+#define TFGVEL(x)   getTransformVelocity(x)
+#define TFGDIR(x)   getTransformDirection(x)
+#define TFGANG(x)   getTransformAngle(x)
+
 typedef struct transform
 {
     float force;

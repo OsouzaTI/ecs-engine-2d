@@ -5,6 +5,9 @@ Object2D* createObject2D(Display* display, float x, float y, int width, int heig
     object2D->_objectType = OBJECT2D;
     object2D->objectId = OBJECT_ID++;
     object2D->renderCollider = 0;
+    // inicializando identificador com vazio
+    strcpy(object2D->tokenIdentifier, EMPTY_TOKEN_IDENTIFIER);
+
     // Events 
     object2D->Events.update = NULL;
     object2D->Events.boxCollision2DEvent = NULL;
@@ -55,6 +58,10 @@ void setObject2DPosition(Object2D* object2D, float x, float y) {
 
 void setObject2DSize(Object2D* object2D, float x, float y) {
     setTransformSize(getTransformFromObject2D(object2D), x, y);
+}
+
+void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier) {
+    strcpy(object2D->tokenIdentifier, tokenIdentifier);
 }
 
 // destroy

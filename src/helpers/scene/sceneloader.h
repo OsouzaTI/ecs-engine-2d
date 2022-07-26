@@ -15,10 +15,12 @@ typedef struct object_scene_loader
     int hasSize;
     int hasPosition;
     int hasBoxCollider2D;
+    int hasTokenIdentifier;
     Vector2D size;
     Vector2D position;
     char token[2];
     char spriteName[255];
+    char tokenIdentifier[MAX_SIZE_TOKEN_IDENTIFIER];
     int renderBoxCollider2D;
     int collisionTag;
     int collisionTags[N_COLLISION_TAGS];

@@ -107,14 +107,17 @@ CollisionEvent boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
     if(axw > bx && ayh > by && ax < bxw && ay < byh) {
         collisionEvent.hasCollision = 1;
 
-        if(axw - offset <= bx)
+        if(axw - offset <= bx) {
             setVector2D(&normal, -1, 0);
-        else if(ax + offset >= bxw)
+        } else if(ax + offset >= bxw) {
             setVector2D(&normal, 1, 0);
-        else if(ayh - offset <= by)
+        } else if(ayh - offset <= by) {
             setVector2D(&normal, 0, -1);
-        else if(ay + offset >= byh) 
+        } else if(ay + offset >= byh) {
             setVector2D(&normal, 0, 1);
+        } else {
+            setVector2D(&normal, rand()%1, rand()%1);
+        }
 
         collisionEvent.normal = normal;
         return collisionEvent;

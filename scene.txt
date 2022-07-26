@@ -1,18 +1,19 @@
 -- assets
-ASSET_PATH_SEPARATOR \
-ASSET_PATH C:\Users\osouza\OneDrive\Documentos\UFRR\6_semestre\analise_algoritmos\trabalho_final\assets
-ASSET naveA Spaceships\Spaceship#01(24x24).png
-ASSET naveB Spaceships\Spaceship#02(24x24).png
-ASSET blockA blocks\mario_brick.png
-ASSET ball blocks\ball_16x16.png
+ASSET_PATH_SEPARATOR /
+ASSET_PATH /home/csi/Documentos/analise_algoritmos/space-game/assets
+ASSET naveA Spaceships/Spaceship#01(24x24).png
+ASSET naveB Spaceships/Spaceship#02(24x24).png
+ASSET blockA blocks/mario_brick.png
+ASSET blockB blocks/mario_brick_16x16.png
+ASSET ball blocks/ball_16x16.png
 
 -- mapa
 
 MAP_START
-#SIZE 64
+#SIZE 28
 
 #OBJECT_START *
->_SPRITE_NAME blockA
+>_SPRITE_NAME blockB
 >_COLLISION_TAG 0
 >_COLLISION_TAGS 0 0 0 0 0 0 0 0 0 0
 >_BOX_COLLIDER2D 1
@@ -20,6 +21,7 @@ MAP_START
 #OBJECT_END
 
 #OBJECT_START +
+>_TOKEN_IDENTIFIER bola
 >_SPRITE_NAME ball
 >_SIZE 32 32
 >_POSITION 2 10
@@ -29,15 +31,28 @@ MAP_START
 >_BOX_COLLIDER2D_RENDER 1
 #OBJECT_END
 
-**********
-*--------*
-*-*---*--*
-*---*----*
-*-*---*--*
-*---*----*
-*-*---*--*
-*---*--*-*
-*--------*
-**********
+***********************
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------+-----------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+*---------------------*
+***********************
 
 MAP_END
