@@ -27,6 +27,26 @@ void updateCallback(Display* display) {
 
 //---------------------------------------//
 
+void ballCollision(Object2D* ball, CollisionEvent* collision) {
+    Transform* transform = OBJ2DGTF(ball);
+    Object2D* trigged = collision->object;
+
+    Vector2D normal = collision->normal;
+    Vector2D* velocity = getTransformVelocity(transform);
+
+    Vector2D bounc = bounceVector2D(velocity, &normal);
+    printVector2D(velocity);
+    // vetor unitario
+    Vector2D fixCollider;
+    setVector2D(&fixCollider, 2, 2);
+    fixCollider = multiplyVector2D(&fixCollider, &normal);
+    fixCollider = sumVector2D(&transform->position, &fixCollider);
+    setTransformPosition(transform, fixCollider.x, fixCollider.y);
+
+    setVector2D(velocity, bounc.x, bounc.y);
+    setBoxCollider2DColor(getBoxCollider2DFromObject2D(trigged), 255, 0, 0, 255);
+}
+
 int main(int argc, char *argv[]) {
 
     Display* display = initScreen("Teste", 640, 640);
@@ -37,7 +57,11 @@ int main(int argc, char *argv[]) {
     // buscando objeto pelo token de identificação
     Object2D* find = getObject2DByTokenIdentifier(objectManager, "bola");
     if(NOTNULL(find)){
-        TFSPOS(OBJ2DGTF(find), 200, 200);
+        // Transform* ballTransform = OBJ2DGTF(find);
+        // TFSPOS(ballTransform, 200, 200);
+        // TFSDIR(ballTransform, 0, 1);
+        // TFSVEL(ballTransform, 0, 60.0f);        
+        setObjectBoxCollision2DEvent(find, ballCollision);
     }
 
     // iniciando populacao de ratos

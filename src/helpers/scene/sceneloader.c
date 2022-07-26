@@ -7,6 +7,8 @@ ObjectSceneLoader* createObjectSceneLoader() {
     objectSceneLoader->hasPosition = 0;
     objectSceneLoader->hasBoxCollider2D = 0;
     objectSceneLoader->hasTokenIdentifier = 0;
+    objectSceneLoader->hasVelocity = 0;
+    objectSceneLoader->hasDirection = 0;
 
     objectSceneLoader->collisionTag = COLLISION_TAG_0;
     objectSceneLoader->renderBoxCollider2D = 0; 
@@ -45,6 +47,8 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
    
     Vector2D* size = &objectSceneLoader->size;
     Vector2D* pos = &objectSceneLoader->position;
+    Vector2D* velocity = &objectSceneLoader->velocity;
+    Vector2D* direction = &objectSceneLoader->direction;
 
     // definindo tamanho
     if(objectSceneLoader->hasSize){
@@ -54,6 +58,15 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
     // definindo posicao inicial
     if(objectSceneLoader->hasPosition) {
         setObject2DPosition(object2D, size->x * pos->x, size->y * pos->y);
+    }
+
+    // definindo velocidade do objeto
+    if(objectSceneLoader->hasVelocity) {
+        setObject2DVelocity(object2D, velocity->x, velocity->y);
+    }
+
+    if(objectSceneLoader->hasDirection) {
+        setObject2DDirection(object2D, direction->x, direction->y);
     }
 
     // definindo token de identificação
@@ -133,6 +146,16 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                             fscanf(file, "%f %f", &x, &y);
                             setVector2D(&objectSceneLoader->position, x, y);
                             objectSceneLoader->hasPosition = 1;
+                        } else if(strcmp(buffer, ">_VELOCITY") == 0){
+                            float x, y;
+                            fscanf(file, "%f %f", &x, &y);
+                            setVector2D(&objectSceneLoader->velocity, x, y);
+                            objectSceneLoader->hasVelocity = 1;
+                        } else if(strcmp(buffer, ">_DIRECTION") == 0){
+                            float x, y;
+                            fscanf(file, "%f %f", &x, &y);
+                            setVector2D(&objectSceneLoader->direction, x, y);
+                            objectSceneLoader->hasDirection = 1;
                         } else if(strcmp(buffer, ">_TOKEN_IDENTIFIER") == 0) {
                             fscanf(file, "%s", objectSceneLoader->tokenIdentifier);
                             objectSceneLoader->hasTokenIdentifier = 1;

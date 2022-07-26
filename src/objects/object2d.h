@@ -63,6 +63,8 @@ Transform* getTransformFromObject2D(Object2D* object2D);
 // positions
 void setObject2DPosition(Object2D* object2D, float x, float y);
 void setObject2DSize(Object2D* object2D, float x, float y);
+void setObject2DVelocity(Object2D* object2D, float x, float y);
+void setObject2DDirection(Object2D* object2D, float x, float y);
 void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier);
 // destroy
 void destroyObject2D(Object2D* object2D);

@@ -116,7 +116,8 @@ CollisionEvent boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
         } else if(ay + offset >= byh) {
             setVector2D(&normal, 0, 1);
         } else {
-            setVector2D(&normal, rand()%1, rand()%1);
+            int signal = rand()%1 ? 1 : -1;
+            setVector2D(&normal, rand()%1 * signal, rand()%1 * signal);
         }
 
         collisionEvent.normal = normal;

@@ -53,11 +53,19 @@ Transform* getTransformFromObject2D(Object2D* object2D) {
 //----------------------------------
 
 void setObject2DPosition(Object2D* object2D, float x, float y) {
-    setTransformPosition(getTransformFromObject2D(object2D), x, y);
+    setTransformPosition(OBJ2DGTF(object2D), x, y);
 }
 
 void setObject2DSize(Object2D* object2D, float x, float y) {
-    setTransformSize(getTransformFromObject2D(object2D), x, y);
+    setTransformSize(OBJ2DGTF(object2D), x, y);
+}
+
+void setObject2DVelocity(Object2D* object2D, float x, float y) {
+    setTransformVelocity(OBJ2DGTF(object2D), x, y);
+}
+
+void setObject2DDirection(Object2D* object2D, float x, float y) {
+    setTransformDirection(OBJ2DGTF(object2D), x, y);
 }
 
 void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier) {

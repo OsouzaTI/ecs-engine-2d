@@ -14,10 +14,14 @@ typedef struct object_scene_loader
 {
     int hasSize;
     int hasPosition;
+    int hasVelocity;
+    int hasDirection;
     int hasBoxCollider2D;
     int hasTokenIdentifier;
     Vector2D size;
     Vector2D position;
+    Vector2D velocity;
+    Vector2D direction;
     char token[2];
     char spriteName[255];
     char tokenIdentifier[MAX_SIZE_TOKEN_IDENTIFIER];
