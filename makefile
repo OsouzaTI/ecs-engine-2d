@@ -10,7 +10,9 @@ build:
 	./src/objects/* \
 	./src/main.c \
 	-I"src" \
-	-lm \
+	-I"C:\libsdl\include" \
+	-L"C:\libsdl\lib" \
+	-lmingw32 \
 	-lSDL2main \
 	-lSDL2 \
 	-lSDL2_ttf \
@@ -19,4 +21,4 @@ build:
 	-o build
 
 run:
-	./build
+	build.exe

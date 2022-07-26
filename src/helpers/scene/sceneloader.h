@@ -5,18 +5,20 @@
 #include <stdlib.h>
 #include <core/assets.h>
 #include <core/object_manager.h>
+#include <core/constants.h>
 #include <objects/object2d.h>
 #include <helpers/hashtable.h>
-#include <core/constants.h>
 #include <helpers/vector2d.h>
 
 typedef struct object_scene_loader
 {
+    int hasSize;
+    int hasPosition;
+    int hasBoxCollider2D;
     Vector2D size;
     Vector2D position;
     char token[2];
     char spriteName[255];
-    int hasBoxCollider2D;
     int renderBoxCollider2D;
     int collisionTag;
     int collisionTags[N_COLLISION_TAGS];

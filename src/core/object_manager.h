@@ -5,6 +5,7 @@
 #include <helpers/linkedlist.h>
 #include <objects/object2d.h>
 #include <core/display.h>
+#include <core/collision_event.h>
 
 typedef struct object_manager
 {
@@ -17,7 +18,7 @@ void addObjectToManager(ObjectManager* objectManager, void* object);
 void addObject2DToManager(ObjectManager* objectManager, Object2D* object2D);
 void renderAllObjectsInManager(Display* display, ObjectManager* objectManager);
 void updateAllObjectsInManager(Display* display, ObjectManager* objectManager);
-Object2D* _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D); 
+CollisionEvent _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D); 
 void destroyObjectManager(ObjectManager** objectManager);
 
 #endif

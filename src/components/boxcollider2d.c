@@ -103,27 +103,18 @@ CollisionEvent boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
     int byh = by + bh;
 
     Vector2D normal;
-    int offset = 2;
+    int offset = 4;
     if(axw > bx && ayh > by && ax < bxw && ay < byh) {
-        // existe colisao
         collisionEvent.hasCollision = 1;
 
-        // verificando vetor normal
-        if(axw - offset < bx) {
-            normal.x = -1;
-        } else if(ax + offset > bxw) {
-            normal.x = 1;
-        } else {
-            normal.x = 0;
-        }
-        
-        if(ayh - offset < by) {
-            normal.y = 1;
-        } else if(ay + offset > byh) {
-            normal.y = -1;
-        } else {
-            normal.y = 0;
-        }
+        if(axw - offset <= bx)
+            setVector2D(&normal, -1, 0);
+        else if(ax + offset >= bxw)
+            setVector2D(&normal, 1, 0);
+        else if(ayh - offset <= by)
+            setVector2D(&normal, 0, -1);
+        else if(ay + offset >= byh) 
+            setVector2D(&normal, 0, 1);
 
         collisionEvent.normal = normal;
         return collisionEvent;

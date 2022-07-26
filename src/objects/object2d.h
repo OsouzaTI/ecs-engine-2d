@@ -1,11 +1,15 @@
 #ifndef OBJECT2D_H
 #define OBJECT2D_H
 
+#include <core/constants.h>
 #include <components/transform.h>
 #include <components/sprite2d.h>
 #include <components/boxcollider2d.h>
-#include <core/constants.h>
 #include "object.h"
+
+#define GS2DFO2D(x) getSprite2DFromObject2D(x)
+#define GBC2DFO2D(x) getBoxCollider2DFromObject2D(x)
+#define GTFFO2D(x) getTransformFromObject2D(x)
 
 typedef union object { int _objectType; } Object;
 

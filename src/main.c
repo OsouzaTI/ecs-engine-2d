@@ -52,11 +52,26 @@ void ballUpdate(Object2D* ball, Display* display) {
     // );
 }
 
-void ballCollision(Object2D* ball, Object2D* trigged) {
-    Transform* transform = getTransformFromObject2D(ball);
-    // transform->angle = (rand()%300 + 10);
-    multiplyVector2DByScalar(&transform->direction, -1);
-    // multiplyVector2DByScalar(&transform->velocity, -1);
+void ballCollision(Object2D* ball, CollisionEvent* collision) {
+    Transform* transform = GTFFO2D(ball);
+    Object2D* trigged = collision->object;
+
+    Vector2D normal = collision->normal;
+    Vector2D* velocity = getTransformVelocity(transform);
+    // velocity->x += 5.0f;
+    // velocity->y += 5.0f;
+
+    Vector2D bounc = bounceVector2D(velocity, &normal);
+    printVector2D(velocity);
+    // vetor unitario
+    Vector2D fixCollider;
+    setVector2D(&fixCollider, 2, 2);
+    fixCollider = multiplyVector2D(&fixCollider, &normal);
+    // fixCollider = multiplyVector2DByScalar(&fixCollider, -1);
+    fixCollider = sumVector2D(&transform->position, &fixCollider);
+    setTransformPosition(transform, fixCollider.x, fixCollider.y);
+
+    setVector2D(velocity, bounc.x, bounc.y);
     setBoxCollider2DColor(getBoxCollider2DFromObject2D(trigged), 255, 0, 0, 255);
 }
 
@@ -71,21 +86,30 @@ int main(int argc, char *argv[]) {
     
     sceneLoader(objectManager, display, "scene.txt"); 
     
-    printHashTable(assets);
+    // printHashTable(assets);
 
-    Object2D* ball = createObject2D(display, 80, 80, 16, 16);
+    Object2D* ball = createObject2D(display, 80, 200, 16, 16);
     setBoxCollider2D(ball);
-    setBoxCollider2DTag(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_1);
-    setBoxCollider2DTagCollisionWith(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_0, COLLISION_ENABLED);
-    setBoxCollider2DTagCollisionWith(getBoxCollider2DFromObject2D(ball), COLLISION_TAG_2, COLLISION_ENABLED);
-    setTransformDirection(getTransformFromObject2D(ball), 0, -1);
-    setTransformVelocity(getTransformFromObject2D(ball), 0, 0.5f);
-    setTransformAngle(getTransformFromObject2D(ball), 0.0f);
-
+    setBoxCollider2DTag(GBC2DFO2D(ball), COLLISION_TAG_1);
+    setBoxCollider2DTagCollisionWith(GBC2DFO2D(ball), COLLISION_TAG_0, COLLISION_ENABLED);
+    setBoxCollider2DTagCollisionWith(GBC2DFO2D(ball), COLLISION_TAG_1, COLLISION_ENABLED);
+    // setBoxCollider2DTagCollisionWith(GBC2DFO2D(ball), COLLISION_TAG_2, COLLISION_ENABLED);
+    setTransformDirection(GTFFO2D(ball), 1, 1);
+    setTransformVelocity(GTFFO2D(ball), 360.5f, 20.0f);
+    setTransformAngle(GTFFO2D(ball), 0.0f);
     setSpriteObject2D(display, ball, getAsset("ball"));
     setObject2DUpdateCallback(ball, ballUpdate);
     setObjectBoxCollision2DEvent(ball, ballCollision);
     addObject2DToManager(objectManager, ball);
+
+    Object2D* ball2 = createObject2D(display, display->size.x / 2 - 16, display->size.y / 2 - 16, 32, 32);
+    setBoxCollider2D(ball2);
+    setBoxCollider2DTag(GBC2DFO2D(ball2), COLLISION_TAG_1);
+    
+    ball2->renderCollider = 1;
+    setSpriteObject2D(display, ball2, getAsset("ball"));
+    // addObject2DToManager(objectManager, ball2);
+    
     
     while(display->run) {
         // cor de fundo

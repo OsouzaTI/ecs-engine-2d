@@ -50,9 +50,9 @@ void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
                 }
 
                 if(NOTNULL(object2D->Events.boxCollision2DEvent)) {
-                    Object2D* objectTriggeredBoxCollision2D = _firstBoxCollider2DTriggered(objectManager, object2D);
-                    if(NOTNULL(objectTriggeredBoxCollision2D)){
-                        (object2D->Events.boxCollision2DEvent)(object2D, objectTriggeredBoxCollision2D);
+                    CollisionEvent collision = _firstBoxCollider2DTriggered(objectManager, object2D);
+                    if(collision.hasCollision){
+                        (object2D->Events.boxCollision2DEvent)(object2D, &collision);
                     }                    
                 }
             } break;            
@@ -62,18 +62,23 @@ void updateAllObjectsInManager(Display* display, ObjectManager* objectManager) {
     }
 }
 
-Object2D* _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D) {
+CollisionEvent _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D) {
+    CollisionEvent collision;
     forEach(object, objectManager->objects) {
         Object2D* objectTest = (Object2D*)object->data;
+        if(object2D == objectTest)
+            continue;
+            
         BoxCollider2D* boxA = object2D->Components.boxcollider2D;
         BoxCollider2D* boxB = objectTest->Components.boxcollider2D;  
-        CollisionEvent collisionEvent = boxCollision2D(boxA, boxB); 
-        if((object2D != objectTest) && collisionEvent.hasCollision){
-            printf("Vetor Normal: V(%f, %f)\n", collisionEvent.normal.x, collisionEvent.normal.y);
-            return objectTest;
+        collision = boxCollision2D(boxA, boxB); 
+        if(collision.hasCollision){
+            printf("Vetor Normal: V(%f, %f)\n", collision.normal.x, collision.normal.y);
+            collision.object = objectTest;
+            return collision;
         }
     }
-    return NULL;
+    return collision;
 }
 
 void destroyObjectManager(ObjectManager** objectManager) {

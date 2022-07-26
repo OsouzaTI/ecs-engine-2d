@@ -1,10 +1,8 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
+#include <math.h>
 #include <SDL2/SDL.h>
-
-// Algumas definiçoes matematicas
-# define M_PI		3.14159265358979323846	/* pi */
 
 #define ISNULL(x) (x == NULL)
 #define NOTNULL(x) !ISNULL(x)
@@ -37,9 +35,11 @@ typedef enum collision_tag {
 // fix struct names
 typedef struct display Display;
 typedef struct object2d Object2D;
+typedef struct vector2d Vector2D;
+typedef struct collision_event CollisionEvent;
 
 typedef void(*InputCallbackEvent)(SDL_Event*);
 typedef void(*UpdateCallbackEvent)(Display*);
-typedef void(*ObjectBoxCollision2DEvent)(Object2D*, Object2D*);
+typedef void(*ObjectBoxCollision2DEvent)(Object2D*, CollisionEvent*);
 
 #endif

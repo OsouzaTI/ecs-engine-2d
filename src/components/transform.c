@@ -14,12 +14,11 @@ Transform* createTransform(float x, float y, int width, int height) {
 void updateTransform(Display* display, Transform* transform) {
     float dt = display->deltaTime;
     float angle = transform->angle;
-    Vector2D pos = cloneVector2D(&transform->position);
-    Vector2D *calc = multiplyVector2D(&pos, &transform->direction);
-    multiplyVector2D(calc, &transform->velocity);
-    rotateVector2D(calc, DEGTORAD(transform->angle));
-    multiplyVector2DByScalar(calc, dt);    
-    sumVector2D(&transform->position, calc);
+    // posicao atual
+    Vector2D d = multiplyVector2D(&transform->direction, &transform->velocity);
+    d = multiplyVector2DByScalar(&d, dt);
+    Vector2D pos = sumVector2D(&transform->position, &d);
+    setVector2D(&transform->position, pos.x, pos.y);
 }
 
 void setTransformSize(Transform* transform, float x, float y) {
