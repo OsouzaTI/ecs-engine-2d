@@ -215,7 +215,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                         Object2D* object2D = createObject2D(display, SIZE * i, SIZE * line, SIZE, SIZE);                    
                         // printObjectSceneLoader(objectSceneLoader);
                         objectSceneLoaderBindWithObject2D(display, objectSceneLoader, object2D);
-                        addObject2DToManager(objectManager, object2D);
+                        addObjectToManager(objectManager, VOID(object2D));
                     }                     
                 }          
 

@@ -5,8 +5,10 @@
 #include <string.h>
 #include <helpers/linkedlist.h>
 #include <objects/object2d.h>
+#include <components/text2d.h>
 #include <core/display.h>
 #include <core/collision_event.h>
+#include <core/constants.h>
 
 typedef struct object_manager
 {
@@ -17,7 +19,6 @@ typedef struct object_manager
 ObjectManager* createObjectManager(Display* display);
 
 void addObjectToManager(ObjectManager* objectManager, void* object);
-void addObject2DToManager(ObjectManager* objectManager, Object2D* object2D);
 void renderAllObjectsInManager(ObjectManager* objectManager);
 void updateAllObjectsInManager(ObjectManager* objectManager);
 Object2D* getObject2DByTokenIdentifier(ObjectManager* objectManager, char* tokenIdentifier);

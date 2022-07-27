@@ -6,4 +6,9 @@
 
 extern int OBJECT_ID;
 
+typedef union object { 
+    int _objectType; 
+    int objectId;
+} Object;
+
 #endif

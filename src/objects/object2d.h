@@ -18,16 +18,8 @@
 #define OBJ2DSBC(x)         setBoxCollider2D(x)
 
 
-typedef union object { 
-    int _objectType; 
-    int objectId;
-
-} Object;
-
 // type of object2D
 typedef struct object2d Object2D;
-// callback update function
-typedef void(*ObjectUpdateCallback)(Object2D*, Display*);
 
 typedef struct object2d
 {
@@ -42,14 +34,14 @@ typedef struct object2d
         void* owner[OBJECT2D_OWNERS_SIZE];
     } Owner;
     
-    struct components
+    struct object2d_components
     {
         Transform* transform;
         Sprite2D* sprite2d;
         BoxCollider2D* boxcollider2D;    
     } Components;    
 
-    struct events
+    struct object2d_events
     {
         ObjectUpdateCallback update;
         ObjectBoxCollision2DEvent boxCollision2DEvent;

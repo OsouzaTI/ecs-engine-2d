@@ -12,27 +12,28 @@ void addObjectToManager(ObjectManager* objectManager, void* object) {
     pushLinkedList(objectManager->objects, objectNode);
 }
 
-void addObject2DToManager(ObjectManager* objectManager, Object2D* object2D) {
-    addObjectToManager(objectManager, (void*)object2D);
-}
-
 void renderAllObjectsInManager(ObjectManager* objectManager){
-    forEach(object, objectManager->objects){
+    forEach(object, objectManager->objects){        
         Object* _obj = (Object*)object->data;
         switch (_obj->_objectType)
         {
             case OBJECT2D:
                 renderObject2D(objectManager->display, (Object2D*)object->data);
+                break;  
+            case TEXT2D:
+                renderText2D(objectManager->display, (Text2D*)object->data);
                 break;            
             default:
                 break;
         }
     }
+    printf("renderizou\n");
 }
 
 void updateAllObjectsInManager(ObjectManager* objectManager) {
     forEach(object, objectManager->objects){
         Object* _obj = (Object*)object->data;
+        printf("OBJECT_TYPE: %d\n", _obj->_objectType);
         switch (_obj->_objectType)
         {
             case OBJECT2D:{
@@ -56,11 +57,18 @@ void updateAllObjectsInManager(ObjectManager* objectManager) {
                         (object2D->Events.boxCollision2DEvent)(object2D, &collision);
                     }                    
                 }
-            } break;            
+            } break;
+            case TEXT2D: {
+                Text2D* text2D = (Text2D*)object->data;  
+                if(NOTNULL(text2D->Events.update)) {
+                    (text2D->Events.update)(text2D, objectManager->display);
+                }
+            } break;    
             default:
                 break;
         }
     }
+    printf("atualizou\n");
 }
 
 Object2D* getObject2DByTokenIdentifier(ObjectManager* objectManager, char* tokenIdentifier) {

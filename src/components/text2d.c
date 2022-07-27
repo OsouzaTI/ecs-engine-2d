@@ -4,8 +4,10 @@
 Text2D* createText2D(Display* display, const char* text, int x, int y, int width, int height){
 
     Text2D* text2D = (Text2D*)malloc(sizeof(Text2D));
+    text2D->_objectType = TEXT2D;
+    text2D->objectId = OBJECT_ID++;
     setVector2D(&text2D->size, width, height);
-    setVector2D(&text2D->position, x, y); 
+    setVector2D(&text2D->position, x, y);
 
     text2D->text = (char*)malloc(sizeof(char)*strlen(text));
     strcpy(text2D->text, text);
@@ -42,6 +44,10 @@ void setText2DText(Display* display, Text2D* text2D, const char* text){
 
 void setText2DPosition(Text2D* text2D, int x, int y) {
     setVector2D(&text2D->position, x, y);
+}
+
+void setText2DUpdateCallback(Text2D* text2D, ObjectUpdateCallback update) {
+    text2D->Events.update = update;
 }
 
 void renderText2D(Display* display, Text2D* text2D){

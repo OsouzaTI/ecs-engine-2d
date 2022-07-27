@@ -33,7 +33,7 @@ void addAsset(const char* key, const char* file, AssetType type, void* attribute
                 printf("Fonte %s carregada com sucesso, size = %d\n", file, *size);
                 addGenericHashNode(&fonts, key, (void*)font);
             } else {
-                printf("Erro ao carregar font\n");                
+                printf("Erro ao carregar fonte: %s\n", buffer);                
             }
         } break;
         case ASSET_SOUND:
