@@ -1,11 +1,14 @@
 #ifndef OBJECT2D_H
 #define OBJECT2D_H
 
+#include <string.h>
 #include <core/constants.h>
 #include <components/transform.h>
 #include <components/sprite2d.h>
 #include <components/boxcollider2d.h>
 #include "object.h"
+
+#define OBJECT2D_OWNERS_SIZE 2
 
 #define OBJ2DGSPR(x)        getSprite2DFromObject2D(x)
 #define OBJ2DGBC(x)         getBoxCollider2DFromObject2D(x)
@@ -32,6 +35,12 @@ typedef struct object2d
     int objectId;
     char tokenIdentifier[MAX_SIZE_TOKEN_IDENTIFIER];
     int renderCollider;
+    
+    // estrutura que pode armazenar a referencia de qualquer outra
+    struct owner
+    {
+        void* owner[OBJECT2D_OWNERS_SIZE];
+    } Owner;
     
     struct components
     {
@@ -60,12 +69,14 @@ void setObjectBoxCollision2DEvent(Object2D* object2D, ObjectBoxCollision2DEvent 
 Sprite2D* getSprite2DFromObject2D(Object2D* object2D);
 BoxCollider2D* getBoxCollider2DFromObject2D(Object2D* object2D);
 Transform* getTransformFromObject2D(Object2D* object2D);
+void* getObject2DOwner(Object2D* object2D, int index);
 // positions
 void setObject2DPosition(Object2D* object2D, float x, float y);
 void setObject2DSize(Object2D* object2D, float x, float y);
 void setObject2DVelocity(Object2D* object2D, float x, float y);
 void setObject2DDirection(Object2D* object2D, float x, float y);
 void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier);
+void setObject2DOwner(Object2D* object2D, int index, void* owner);
 // destroy
 void destroyObject2D(Object2D* object2D);
 

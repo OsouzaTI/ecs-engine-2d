@@ -48,6 +48,13 @@ float dotProductVector2D(Vector2D* u, Vector2D* v) {
     return (u->x * v->x) + (u->y * v->y);
 }
 
+float distanceBetweenPoints(Vector2D* u, Vector2D* v) {
+    float uv_x, uv_y;
+    uv_x = powf(u->x - v->x, 2);
+    uv_y = powf(u->y - v->y, 2);
+    return sqrtf(uv_x + uv_y);
+}
+
 Vector2D rotateVector2D(Vector2D* u, float angle) {
     return (Vector2D) {
         u->x * cos(angle) - u->y * sin(angle),

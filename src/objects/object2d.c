@@ -50,6 +50,13 @@ Transform* getTransformFromObject2D(Object2D* object2D) {
     return object2D->Components.transform;
 }
 
+void* getObject2DOwner(Object2D* object2D, int index) {
+    if(index >= OBJECT2D_OWNERS_SIZE){
+        return NULL;
+    }
+    return object2D->Owner.owner[index];
+}
+
 //----------------------------------
 
 void setObject2DPosition(Object2D* object2D, float x, float y) {
@@ -70,6 +77,12 @@ void setObject2DDirection(Object2D* object2D, float x, float y) {
 
 void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier) {
     strcpy(object2D->tokenIdentifier, tokenIdentifier);
+}
+
+void setObject2DOwner(Object2D* object2D, int index, void* owner) {
+    if(index < OBJECT2D_OWNERS_SIZE) {
+        object2D->Owner.owner[index] = owner;
+    }
 }
 
 // destroy

@@ -83,8 +83,7 @@ CollisionEvent _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object
         BoxCollider2D* boxA = object2D->Components.boxcollider2D;
         BoxCollider2D* boxB = objectTest->Components.boxcollider2D;  
         collision = boxCollision2D(boxA, boxB); 
-        if(collision.hasCollision){
-            printf("Vetor Normal: V(%f, %f)\n", collision.normal.x, collision.normal.y);
+        if(collision.hasCollision){            
             collision.object = objectTest;
             return collision;
         }

@@ -4,6 +4,7 @@
 #include <objects/object2d.h>
 #include <core/assets.h>
 #include <components/boxcollider2d.h>
+#include <components/text2d.h>
 #include <core/object_manager.h>
 #include <helpers/scene/sceneloader.h>
 #include "rato.h"
@@ -19,10 +20,6 @@ void inputCallback(SDL_Event* event) {
                 break;
         }
     } 
-}
-
-void updateCallback(Display* display) {
-
 }
 
 //---------------------------------------//
@@ -53,7 +50,7 @@ int main(int argc, char *argv[]) {
     ObjectManager* objectManager = createObjectManager(display);
     
     sceneLoader(objectManager, display, "scene.txt");     
-    
+    // printHashTable(assets);
     // buscando objeto pelo token de identificação
     Object2D* find = getObject2DByTokenIdentifier(objectManager, "bola");
     if(NOTNULL(find)){
@@ -61,13 +58,16 @@ int main(int argc, char *argv[]) {
         // TFSPOS(ballTransform, 200, 200);
         // TFSDIR(ballTransform, 0, 1);
         // TFSVEL(ballTransform, 0, 60.0f);        
-        setObjectBoxCollision2DEvent(find, ballCollision);
+        // setObjectBoxCollision2DEvent(find, ballCollision);
     }
 
     // iniciando populacao de ratos
-    // RatPopulation p;
-    // initRatPopulation(&p, objectManager, N_POPULATION);
+    RatPopulation p;
+    initRatPopulation(&p, objectManager);
 
+    Text2D* text = createText2D(display, "...", 20, 20, 260, 60);
+    
+    char buff[255];
     while(display->run) {
         // cor de fundo
         setClearColor(display, 0, 0, 0, 255);
@@ -81,6 +81,12 @@ int main(int argc, char *argv[]) {
         updateAllObjectsInManager(objectManager);        
         // render object manager
         renderAllObjectsInManager(objectManager);
+        // teste render texto
+        // renderText2D(display, text);
+
+        // sprintf(buff, "x: %.1f y: %.1f", TFGPOS(ballTransform)->x, TFGPOS(ballTransform)->y);
+        // setText2DText(display, text, buff);
+
         // chamadas de renderização        
         render(display);       
     }

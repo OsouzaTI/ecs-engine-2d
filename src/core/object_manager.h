@@ -2,6 +2,7 @@
 #define OBJECT_MANAGER_H
 
 #include <stdlib.h>
+#include <string.h>
 #include <helpers/linkedlist.h>
 #include <objects/object2d.h>
 #include <core/display.h>

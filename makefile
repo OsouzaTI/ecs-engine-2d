@@ -13,7 +13,7 @@ build:
 	-I"src" \
 	-I"C:\libsdl\include" \
 	-L"C:\libsdl\lib" \
-	-lm \
+	-lmingw32 \
 	-lSDL2main \
 	-lSDL2 \
 	-lSDL2_ttf \
@@ -22,4 +22,4 @@ build:
 	-o build
 
 run:
-	./build
+	build.exe

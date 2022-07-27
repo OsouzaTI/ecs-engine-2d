@@ -98,15 +98,23 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
         if (res == EOF)
             break;
 
-        // adicionando asset ao projeto
-        if (strcmp(buffer, "ASSET") == 0) {
-            char name[255], path[255];
-            fscanf(file, "%s %s", name, path);
-            addAsset(name, path);
-        } else if(strcmp(buffer, "ASSET_PATH") == 0) {
+        if(strcmp(buffer, "ASSET_PATH") == 0) {
             char path[255];
             fscanf(file, "%s", path);
             setAssetPath(path);
+        } else if (strcmp(buffer, "ASSET_IMAGE") == 0) {
+            char name[255], path[255];
+            fscanf(file, "%s %s", name, path);
+            addAsset(name, path, ASSET_IMAGE, NULL);
+        } else if (strcmp(buffer, "ASSET_FONT") == 0) {
+            int size;
+            char name[255], path[255];
+            fscanf(file, "%s %s %d", name, path, &size);
+            addAsset(name, path, ASSET_FONT, (void*)&size);
+        } else if (strcmp(buffer, "ASSET_SOUND") == 0) {
+            char name[255], path[255];
+            fscanf(file, "%s %s", name, path);
+            addAsset(name, path, ASSET_SOUND, NULL);
         } else if(strcmp(buffer, "ASSET_PATH_SEPARATOR") == 0) {
             char separator[2];
             fscanf(file, "%s", separator);
@@ -164,8 +172,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                         } else if(strcmp(buffer, ">_COLLISION_TAGS") == 0) {
                             for (int i = 0; i < N_COLLISION_TAGS; i++)
                             {
-                                fscanf(file, "%d", &objectSceneLoader->collisionTags[i]);         
-                                printf("Collision read: %d\n", objectSceneLoader->collisionTags[i]);                       
+                                fscanf(file, "%d", &objectSceneLoader->collisionTags[i]);                                         
                             }                            
                         } else if(strcmp(buffer, ">_BOX_COLLIDER2D") == 0) {
                             fscanf(file, "%d", &objectSceneLoader->hasBoxCollider2D);

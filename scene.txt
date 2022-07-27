@@ -1,11 +1,15 @@
 -- assets
-ASSET_PATH_SEPARATOR /
-ASSET_PATH /home/csi/Documentos/analise_algoritmos/space-game/assets
-ASSET naveA Spaceships/Spaceship#01(24x24).png
-ASSET naveB Spaceships/Spaceship#02(24x24).png
-ASSET blockA blocks/mario_brick.png
-ASSET blockB blocks/mario_brick_16x16.png
-ASSET ball blocks/ball_16x16.png
+ASSET_PATH_SEPARATOR \
+ASSET_PATH C:\Users\osouza\OneDrive\Documentos\UFRR\6_semestre\analise_algoritmos\trabalho_final\assets
+ASSET_IMAGE naveA Spaceships\Spaceship#01(24x24).png
+ASSET_IMAGE naveB Spaceships\Spaceship#02(24x24).png
+ASSET_IMAGE blockA blocks\mario_brick.png
+ASSET_IMAGE blockB blocks\mario_brick_16x16.png
+ASSET_IMAGE ball blocks\ball_16x16.png
+ASSET_IMAGE ballred ball_red_16x16.png
+ASSET_IMAGE ballgreen ball_green_16x16.png
+
+ASSET_FONT minecraft minecraft.ttf 32
 
 -- mapa
 
@@ -20,17 +24,16 @@ MAP_START
 >_BOX_COLLIDER2D_RENDER 1
 #OBJECT_END
 
-#OBJECT_START +
->_TOKEN_IDENTIFIER bola
->_SPRITE_NAME ball
->_SIZE 32 32
->_POSITION 2 10
->_DIRECTION 1 1
->_VELOCITY 60 200
->_COLLISION_TAG 1
->_COLLISION_TAGS 1 0 0 0 0 0 0 0 0 0
->_BOX_COLLIDER2D 1
->_BOX_COLLIDER2D_RENDER 1
+#OBJECT_START i
+>_TOKEN_IDENTIFIER inicio
+>_SPRITE_NAME ballgreen
+>_SIZE 16 16
+#OBJECT_END
+
+#OBJECT_START f
+>_TOKEN_IDENTIFIER fim
+>_SPRITE_NAME ballred
+>_SIZE 16 16
 #OBJECT_END
 
 ***********************
@@ -44,7 +47,8 @@ MAP_START
 *---------------------*
 *---------------------*
 *---------------------*
-*---------+-----------*
+*---------------------*
+*----------i----------*
 *---------------------*
 *---------------------*
 *---------------------*
@@ -53,8 +57,7 @@ MAP_START
 *---------------------*
 *---------------------*
 *---------------------*
-*---------------------*
-*---------------------*
+*-------------------f-*
 ***********************
 
 MAP_END

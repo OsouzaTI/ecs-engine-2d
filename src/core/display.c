@@ -38,7 +38,10 @@ Display* initScreen(const char* title, int width, int height) {
         exit(-1);
     }
 
- 	
+    if(TTF_Init() == -1) {
+        return 0;
+    }
+
     // load support for the JPG and PNG image formats
     int flags = IMG_INIT_JPG | IMG_INIT_PNG;
     int initted=IMG_Init(flags);
