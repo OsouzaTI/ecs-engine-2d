@@ -30,7 +30,7 @@ void setText2DText(Display* display, Text2D* text2D, const char* text){
     text2D->text = (char*)realloc(text2D->text, sizeof(char)*(strlen(text)+1));
     strcpy(text2D->text, text);
 
-    SDL_Surface* textSurface = TTF_RenderText_Blended(getFont("minecraft"), text2D->text, SDLC_WHITE);
+    SDL_Surface* textSurface = TTF_RenderText_Blended(getFont("arial"), text2D->text, SDLC_WHITE);
     if(ISNULL(textSurface)){
         printf("nao foi possivel setar valor de label\n");
         return;

@@ -62,6 +62,7 @@ Sprite2D* getSprite2DFromObject2D(Object2D* object2D);
 BoxCollider2D* getBoxCollider2DFromObject2D(Object2D* object2D);
 Transform* getTransformFromObject2D(Object2D* object2D);
 void* getObject2DOwner(Object2D* object2D, int index);
+int isObject2D(Object* object);
 // positions
 void setObject2DPosition(Object2D* object2D, float x, float y);
 void setObject2DSize(Object2D* object2D, float x, float y);

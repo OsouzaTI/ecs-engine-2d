@@ -18,9 +18,9 @@ void inputCallback(SDL_Event* event) {
     if(event->type == SDL_KEYDOWN){
         switch (event->key.keysym.sym)
         {    
-            case SDLK_SPACE:
-                printf("Apertou o botao 'a'\n");
-                break;
+            case SDLK_SPACE:{
+                rePopulation(&p);                
+            }break;             
         }
     } 
 }
@@ -55,7 +55,7 @@ int main(int argc, char *argv[]) {
     // iniciando populacao de ratos
     initRatPopulation(&p, objectManager);
         
-    Text2D* text = createText2D(display, "...", 42, 42, 100, 20);
+    Text2D* text = createText2D(display, "...", 300, 40, 200, 40);
     void* point = VOID(text);
     Object* obj = (Object*)point;
     printf("type: %d\n", obj->_objectType);

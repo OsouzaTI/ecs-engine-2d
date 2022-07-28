@@ -57,6 +57,10 @@ void* getObject2DOwner(Object2D* object2D, int index) {
     return object2D->Owner.owner[index];
 }
 
+int isObject2D(Object* object) {
+    return (object->_objectType == OBJECT2D);
+}
+
 //----------------------------------
 
 void setObject2DPosition(Object2D* object2D, float x, float y) {

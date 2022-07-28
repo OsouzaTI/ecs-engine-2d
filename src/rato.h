@@ -9,7 +9,7 @@
 #include <helpers/random_number.h>
 
 // população
-#define N_POPULATION 10
+#define N_POPULATION 200
 #define N_CROMOSSOMOS 600
 #define RAT_SPRITE "ball"
 
@@ -44,18 +44,10 @@ typedef struct rat_population
     Rat population[N_POPULATION];
 } RatPopulation;
 
-Object2D *inicio, *final;
+void rePopulation(RatPopulation* rp);
 
-void setRat(Rat* a, Rat* b) {
-    a->fitness = b->fitness;
-    a->objRat = b->objRat;
-    a->Cromossomos.alive = b->Cromossomos.alive;
-    a->Cromossomos.geneticIndex = b->Cromossomos.geneticIndex;
-    for (int i = 0; i < N_CROMOSSOMOS; i++)
-    {
-        a->Cromossomos.geneticCode[0][i] = b->Cromossomos.geneticCode[0][i];
-    }
-}
+Object2D *inicio, *final;
+int timer = 0;
 
 void merge(Rat rat[], int l, int m, int r) {
     int i, j, k;
@@ -116,15 +108,13 @@ void mergeSort(Rat rat[], int l, int r)
 
 
 void ratCross(Rat* a, Rat* b, Rat* c) {
-    float mutation = obterNumeroUniformeContinuo(0.1, 0.25);
+    float mutation = 0.008f;
     for (int i = 0; i < N_CROMOSSOMOS; i++)
     {
-        float X = obterNumeroUniforme();
-        if(X < mutation) {
-            c->Cromossomos.geneticCode[0][i] = obterNumeroUniformeDiscreto(0, 3);
+        if(obterNumeroUniforme() < mutation) {
+            c->Cromossomos.geneticCode[0][i] = (int)(obterNumeroUniforme() * 4);
         } else {
-            float Y = obterNumeroUniforme();
-            if(Y < 0.5) {
+            if(obterNumeroUniforme() < 0.5) {
                 c->Cromossomos.geneticCode[0][i] = a->Cromossomos.geneticCode[1][i];
             } else {
                 c->Cromossomos.geneticCode[0][i] = b->Cromossomos.geneticCode[1][i];
@@ -139,13 +129,11 @@ void newGenRatPopulation(RatPopulation* rp) {
     float reproducao = 0.2f;
     
     mergeSort(rp->population, 0, N_POPULATION - 1);
-    
-    printf("testando merge sort\n");
-    for (int i = 0; i < N_POPULATION; i++)
-    {
-        printf("%d: fitness(%f)\n", i, rp->population[i].fitness);
-    }
-    
+    printf("Melhores da geracao (Top 3):\n");
+    printf("\t1 > %.3f\n", rp->population[0].fitness);
+    printf("\t2 > %.3f\n", rp->population[1].fitness);
+    printf("\t3 > %.3f\n", rp->population[2].fitness);
+
     // cria uma copia do material genetico de todos os cromossomos
     for (int i = 0; i < N_POPULATION; i++)
     {
@@ -191,7 +179,12 @@ float angle = 0.0f;
 void ratUpdate(void* rat, Display* display) {    
     Transform* ratTrasform = OBJ2DGTF((Object2D*)rat);
     Rat* r = (Rat*)getObject2DOwner(rat, 0);
-    
+    RatPopulation* rp = (RatPopulation*)getObject2DOwner(rat, 1);
+    if(timer > 10000) {
+        rePopulation(rp);
+        return;
+    }
+
     if(!r->Cromossomos.alive) return;
 
     Vector2D* pos = &ratTrasform->position;
@@ -199,10 +192,10 @@ void ratUpdate(void* rat, Display* display) {
     int* geneticIndex = &r->Cromossomos.geneticIndex;
     switch (r->Cromossomos.geneticCode[0][(*geneticIndex)%200])
     {
-        case 0: pos->y-- * display->deltaTime * 1.4f; break; // UP               
-        case 1: pos->x++ * display->deltaTime * 1.4f; break; // RIGHT                  
-        case 2: pos->y++ * display->deltaTime * 1.4f; break; // DOWN
-        case 3: pos->x-- * display->deltaTime * 1.4f; break; // LEFT
+        case 0: pos->y-=1.0f; break; // UP               
+        case 1: pos->x+=1.0f; break; // RIGHT                  
+        case 2: pos->y+=1.0f; break; // DOWN
+        case 3: pos->x-=1.0f; break; // LEFT
         default:
             break;
     }
@@ -210,6 +203,14 @@ void ratUpdate(void* rat, Display* display) {
 
     // apos o movimento recalcula o fitness
     r->fitness = distanceBetweenPoints(pos, TFGPOS(OBJ2DGTF(final)));
+}
+
+void rePopulation(RatPopulation* rp) {
+    newGenRatPopulation(rp);
+    resetRatPopulation(rp);
+    rp->generation++;
+    // reseta o tempo
+    timer = 0;
 }
 
 // colisao
@@ -223,18 +224,12 @@ void ratCollision(Object2D* rat, CollisionEvent* collision) {
     
     r->Cromossomos.alive = 0; 
     rp->alives--;
-    printf("Individuo morto, restam %d(s) individuos\n", rp->alives);
+    // printf("Individuo morto, restam %d(s) individuos\n", rp->alives);
 
     // necessario gerar novos individuos
     if(rp->alives == 0 && !rp->finish) {
-        // termina o jogo
         rp->finish = 1;
-        // realiza as operaçoes para uma nova geração
-        printf("Gerando nova população\n");
-        newGenRatPopulation(rp);
-        printf("Resetando geracao\n");
-        resetRatPopulation(rp);
-        printf("Geracao resetada\n");
+        rePopulation(rp);
     }
 
 }
@@ -253,7 +248,7 @@ void initRatPopulation(RatPopulation* rp, ObjectManager* objectManager) {
         // inicializando o codigo genetico de maneira aleatoria
         for (int j = 0; j < N_CROMOSSOMOS; j++)
         {
-            rp->population[i].Cromossomos.geneticCode[0][j] = obterNumeroUniformeDiscreto(0, 3);
+            rp->population[i].Cromossomos.geneticCode[0][j] = (int)(obterNumeroUniforme() * 4);
         }
         
         /**
@@ -287,7 +282,7 @@ void initRatPopulation(RatPopulation* rp, ObjectManager* objectManager) {
 
 // Update callback da engine
 void updateCallback(Display* display) {
-
+    timer++;
 }
 
 #endif

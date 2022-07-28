@@ -27,13 +27,11 @@ void renderAllObjectsInManager(ObjectManager* objectManager){
                 break;
         }
     }
-    printf("renderizou\n");
 }
 
 void updateAllObjectsInManager(ObjectManager* objectManager) {
     forEach(object, objectManager->objects){
         Object* _obj = (Object*)object->data;
-        printf("OBJECT_TYPE: %d\n", _obj->_objectType);
         switch (_obj->_objectType)
         {
             case OBJECT2D:{
@@ -68,7 +66,6 @@ void updateAllObjectsInManager(ObjectManager* objectManager) {
                 break;
         }
     }
-    printf("atualizou\n");
 }
 
 Object2D* getObject2DByTokenIdentifier(ObjectManager* objectManager, char* tokenIdentifier) {
@@ -84,10 +81,14 @@ Object2D* getObject2DByTokenIdentifier(ObjectManager* objectManager, char* token
 CollisionEvent _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D) {
     CollisionEvent collision;
     forEach(object, objectManager->objects) {
+
+        Object* _object = (Object*)object->data;
+        if(!isObject2D(_object))
+            continue;
         Object2D* objectTest = (Object2D*)object->data;
         if(object2D == objectTest)
             continue;
-            
+
         BoxCollider2D* boxA = object2D->Components.boxcollider2D;
         BoxCollider2D* boxB = objectTest->Components.boxcollider2D;  
         collision = boxCollision2D(boxA, boxB); 
