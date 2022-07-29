@@ -37,6 +37,8 @@ void updateAllObjectsInManager(ObjectManager* objectManager) {
             case OBJECT2D:{
                 Object2D* object2D = (Object2D*)object->data;   
 
+                // EVENTOS DOS COMPONENTES
+
                 if(NOTNULL(object2D->Components.transform)) {
                     updateTransform(objectManager->display, getTransformFromObject2D(object2D));
                 }
@@ -44,6 +46,12 @@ void updateAllObjectsInManager(ObjectManager* objectManager) {
                 if(NOTNULL(object2D->Components.boxcollider2D)) {
                     updateBoxCollider2D(getBoxCollider2DFromObject2D(object2D));
                 }
+
+                if(NOTNULL(object2D->Components.sprite2D)) {
+                    updateSprite2D(objectManager->display, getSprite2DFromObject2D(object2D));
+                }
+
+                // EVENTOS DO OBJETO
 
                 if(NOTNULL(object2D->Events.update)) {
                     (object2D->Events.update)(object2D, objectManager->display);

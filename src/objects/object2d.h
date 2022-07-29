@@ -37,7 +37,7 @@ typedef struct object2d
     struct object2d_components
     {
         Transform* transform;
-        Sprite2D* sprite2d;
+        Sprite2D* sprite2D;
         BoxCollider2D* boxcollider2D;    
     } Components;    
 

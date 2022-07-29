@@ -28,8 +28,13 @@ void inputCallback(SDL_Event* event) {
 void textUpdate(void* text2D, Display* display) {
     Text2D* text = (Text2D*)text2D;
     char buff[255];
-    sprintf(buff, "Geracao: %d, Individuos: %d", p.generation, N_POPULATION);
-    setText2DText(display, text, buff);
+    sprintf(buff, "Geracao: %d, Individuos: %d | Win rate: %.2f%% | Timer: %d", p.generation, N_POPULATION, (p.winners/(float)N_POPULATION)*100, p.timer);
+    setText2DText(display, text, buff);    
+}
+
+// Update callback da engine
+void updateCallback(Display* display) {
+    p.timer++;
 }
 
 //---------------------------------------//
@@ -41,27 +46,21 @@ int main(int argc, char *argv[]) {
     ObjectManager* objectManager = createObjectManager(display);
     
     sceneLoader(objectManager, display, "scene.txt");     
-    // printHashTable(assets);
-    // buscando objeto pelo token de identificação
-    Object2D* find = getObject2DByTokenIdentifier(objectManager, "bola");
-    if(NOTNULL(find)) {
-        // Transform* ballTransform = OBJ2DGTF(find);
-        // TFSPOS(ballTransform, 200, 200);
-        // TFSDIR(ballTransform, 0, 1);
-        // TFSVEL(ballTransform, 0, 60.0f);        
-        // setObjectBoxCollision2DEvent(find, ballCollision);
-    }
-
+    
     // iniciando populacao de ratos
     initRatPopulation(&p, objectManager);
         
-    Text2D* text = createText2D(display, "...", 300, 40, 200, 40);
-    void* point = VOID(text);
-    Object* obj = (Object*)point;
-    printf("type: %d\n", obj->_objectType);
-
+    Text2D* text = createText2D(display, "...", 10, 600, 320, 24);
     setText2DUpdateCallback(text, textUpdate);
     addObjectToManager(objectManager, VOID(text));
+
+    // teste de animação
+    Object2D* rato = createObject2D(display, 100, 100, 64, 64);
+    rato->renderCollider = 1;
+    setBoxCollider2D(rato);
+    setSpriteObject2D(display, rato, getAsset("rat"));
+    setAnimationSprite2D(OBJ2DGSPR(rato), 0.8f, 4);
+    addObjectToManager(objectManager, VOID(rato));
 
     while(display->run) {
         // cor de fundo
