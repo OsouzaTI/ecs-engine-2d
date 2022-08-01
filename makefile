@@ -1,7 +1,8 @@
 build:
 	gcc \
 	-Wfatal-errors \
-	-Wl,--stack,20485760 \
+	-Wl,--heap,60485760 \
+	-Wl,--stack,60485760 \
 	-std=c99 \
 	./src/components/* \
 	./src/core/* \

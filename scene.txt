@@ -1,12 +1,16 @@
 -- assets
 ASSET_PATH_SEPARATOR \
 ASSET_PATH F:\Projects\c\trabalho_final\assets
+ASSET_IMAGE naveA Spaceships\Spaceship#01(24x24).png
+ASSET_IMAGE naveB Spaceships\Spaceship#02(24x24).png
 ASSET_IMAGE blockA blocks\mario_brick.png
+ASSET_IMAGE blockB blocks\mario_brick_16x16.png
 ASSET_IMAGE ball blocks\ball_16x16.png
 ASSET_IMAGE ballred ball_red_16x16.png
 ASSET_IMAGE ballgreen ball_green_16x16.png
 ASSET_IMAGE ballorange ball_orange_16x16.png
 ASSET_IMAGE rat rat_sprite.png
+ASSET_IMAGE plant plant01.png
 
 ASSET_FONT minecraft Minecraft.ttf 32
 ASSET_FONT arial arial.ttf 24

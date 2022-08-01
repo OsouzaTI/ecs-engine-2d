@@ -197,9 +197,9 @@ void initializeObjects2D(ObjectManager* objectManager) {
 
         // setando sprite   
         if(i == 0) {
-            setObject2DSprite(objectManager->display, rat, getAsset(RAT_SPRITE));        
-        } else {
             setObject2DSprite(objectManager->display, rat, getAsset("ballorange"));        
+        } else {
+            setObject2DSprite(objectManager->display, rat, getAsset(RAT_SPRITE));        
         }
         
         // setando animação
