@@ -8,10 +8,15 @@
 #include <core/constants.h>
 #include <helpers/vector2d.h>
 #include <helpers/mouse.h>
+#include <components/camera2d.h>
 #include "log.h"
+
+#define DPGC2D(x) getDisplayCamera2D(x)
 
 // tipos de retornos possiveis da funcao input
 enum {INP_EXIT};
+
+typedef struct camera2d Camera2D;
 
 typedef struct display {
     int run;
@@ -21,6 +26,12 @@ typedef struct display {
     SDL_Color clearColor;
     Vector2D size;
     Mouse mouse;
+
+    struct display_components
+    {
+        Camera2D* camera2D;
+    } Components;
+    
 
     // frame rate in runtime
     float FPS;
@@ -86,9 +97,12 @@ void render(Display* display);
  */
 void clearScreen(Display* display);
 
+Camera2D* getDisplayCamera2D(Display* display);
+
 //------> helpers
 void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void setDisplayTitle(Display* display, const char* title);
+void setDisplayCamera2D(Display* display, int width, int height);
 
 void _updateMousePosition(Display* display);
 void _fixFrameRate(Display* display);

@@ -58,3 +58,13 @@ void renderText2D(Display* display, Text2D* text2D){
     };
     SDL_RenderCopy(display->renderer, text2D->textureText, NULL, &rect);
 }
+
+int text2dMemoryAllocated(Text2D* text2D) {
+
+    if(ISNULL(text2D)) {
+        return 0;
+    }
+
+    return sizeof(Text2D);
+
+}

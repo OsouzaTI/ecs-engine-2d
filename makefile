@@ -1,8 +1,6 @@
 build:
 	gcc \
 	-Wfatal-errors \
-	-Wl,--heap,60485760 \
-	-Wl,--stack,60485760 \
 	-std=c99 \
 	./src/components/* \
 	./src/core/* \
@@ -10,19 +8,17 @@ build:
 	./src/helpers/*.c \
 	./src/helpers/scene/* \
 	./src/objects/* \
-	./src/rat.h \
-	./src/rat.c \
 	./src/main.c \
+	./src/rat.c \
+	./src/rat.h \
 	-I"src" \
-	-I"C:\libsdl\include" \
-	-L"C:\libsdl\lib" \
-	-lmingw32 \
+	-lm \
 	-lSDL2main \
 	-lSDL2 \
 	-lSDL2_ttf \
 	-lSDL2_image \
 	-lSDL2_mixer \
-	-o build.exe
+	-o build
 
 run:
-	build.exe
+	./build

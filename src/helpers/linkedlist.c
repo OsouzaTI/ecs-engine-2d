@@ -32,16 +32,23 @@ void pushLinkedList(LinkedList* linkedlist, Node* node) {
     linkedlist->size++;
 }
 
-void linkedListDestroyRecursivelyNodes(Node* node) {
-    if(ISNULL(node))
+void linkedListDestroyRecursivelyNodes(Node** node) {
+    if(ISNULL(*node))
         return;
-    linkedListDestroyRecursivelyNodes(node->next);
-    free(node);
-    node = NULL;
+    linkedListDestroyRecursivelyNodes(&(*node)->next);
+    free(*node);
+    *node = NULL;
 }
 
 void destroyLinkedList(LinkedList** linkedlist) {
     Node* n = (*linkedlist)->head;
-    linkedListDestroyRecursivelyNodes(n);
+    linkedListDestroyRecursivelyNodes(&n);
     free(linkedlist);
+}
+
+int linkedListMemoryAllocated(LinkedList* linkedList) {
+    if(linkedList == NULL) {
+        return 0;
+    } 
+    return sizeof(LinkedList) + (sizeof(Node) * linkedList->size);
 }

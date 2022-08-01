@@ -149,3 +149,27 @@ void renderObject2D(Display* display, Object2D* object2D) {
     }
 
 }
+
+int object2DMemoryAllocated(Object2D* object2D) {
+
+    if(ISNULL(object2D)) {
+        return 0;
+    }
+
+    int bytes = 0;
+
+    if(NOTNULL(object2D->Components.boxcollider2D)) {
+        bytes += sizeof(BoxCollider2D);
+    } 
+
+    if(NOTNULL(object2D->Components.sprite2D)) {
+        bytes += sizeof(Sprite2D);
+    }
+
+    if(NOTNULL(object2D->Components.transform)) {
+        bytes += sizeof(Transform);
+    }
+
+    return bytes;
+
+}

@@ -127,3 +127,22 @@ void destroyObjectManager(ObjectManager** objectManager) {
     destroyLinkedList(&objects);
     free(objectManager);
 }
+
+int objectManagerMemoryAllocated(ObjectManager* objectManager) {
+    if(ISNULL(objectManager)) {
+        return 0;
+    }
+    
+    int bytes = 0;
+    forEach(object, objectManager->objects){
+        Object* _obj = (Object*)object->data;
+        switch (_obj->_objectType)
+        {
+            case OBJECT2D: bytes += object2DMemoryAllocated((Object2D*)object->data);break;
+            case TEXT2D: bytes += text2dMemoryAllocated((Text2D*)object->data);break;
+            default: break;
+        }
+    }
+    
+    return sizeof(ObjectManager) + bytes + linkedListMemoryAllocated(objectManager->objects);
+}

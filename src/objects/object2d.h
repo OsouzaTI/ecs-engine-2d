@@ -76,4 +76,6 @@ void setObject2DRenderBoxCollider2D(Object2D* object2D, int render);
 // destroy
 void destroyObject2D(Object2D* object2D);
 
+int object2DMemoryAllocated(Object2D* object2D);
+
 #endif

@@ -155,3 +155,10 @@ void printHashTable(HashTable* hashTable) {
             printf("[%d]: NULL\n", i);
     }
 }
+
+int hashTableMemoryAllocated(HashTable* hashTable) {
+    if(hashTable == NULL) {
+        return 0;
+    }
+    return sizeof(HashTable) + (sizeof(HashNode) * hashTable->size) + (sizeof(HashNode**) * hashTable->N);
+}

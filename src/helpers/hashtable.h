@@ -30,5 +30,5 @@ void addHashNode(HashTable** hashTable, const char* key, const char* value);
 void addGenericHashNode(HashTable** hashTable, const char* key, void* data);
 HashNode* findHashNode(HashTable* hashTable,const char* key);
 void printHashTable(HashTable* hashTable);
-
+int hashTableMemoryAllocated(HashTable* hashTable);
 #endif

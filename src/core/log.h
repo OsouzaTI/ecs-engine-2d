@@ -11,25 +11,25 @@
     if (ENGINE_DEBUG)
 
 #define LOGERR(x) \
-    DEBUG_ENABLED printf("[LOGERR][%s][%d] %s\n", __FILENAME__, __LINE__, x);
+    DEBUG_ENABLED printf("[LOGERR][%s][%d] %s\n", __FILENAME__, __LINE__, x)
     
 #define LOGERR2(x, y) \
-    DEBUG_ENABLED printf("[LOGERR][%s][%d] %s %s\n", __FILENAME__, __LINE__, x, y);
+    DEBUG_ENABLED printf("[LOGERR][%s][%d] %s %s\n", __FILENAME__, __LINE__, x, y)
 
 #define LOGINF(x) \
-    DEBUG_ENABLED printf("[LOGINF][%s][%d] %s\n", __FILENAME__, __LINE__, x);
+    DEBUG_ENABLED printf("[LOGINF][%s][%d] %s\n", __FILENAME__, __LINE__, x)
 
 #define LOGINF2(x, y) \
-    DEBUG_ENABLED printf("[LOGINF][%s][%d] %s %s\n", __FILENAME__, __LINE__, x, y);
+    DEBUG_ENABLED printf("[LOGINF][%s][%d] %s %s\n", __FILENAME__, __LINE__, x, y)
 
 #define LOGINF3(x, y, z) \
-    DEBUG_ENABLED printf("[LOGINF][%s][%d] %s %s %s\n", __FILENAME__, __LINE__, x, y, z);
+    DEBUG_ENABLED printf("[LOGINF][%s][%d] %s %s %s\n", __FILENAME__, __LINE__, x, y, z)
 
 #define LOGWARN(x) \
-    DEBUG_ENABLED printf("[LOGWARN][%s][%d] %s\n", __FILENAME__, __LINE__, x);
+    DEBUG_ENABLED printf("[LOGWARN][%s][%d] %s\n", __FILENAME__, __LINE__, x)
 
 #define ALLOCATE_MEMORY_ERROR(x, y) \
     if (ISNULL(x)) \
-        printf("[%s][%d] Nao foi possivel alocar memoria para: %s\n", __FILENAME__, __LINE__, y);
+        printf("[%s][%d] Nao foi possivel alocar memoria para: %s\n", __FILENAME__, __LINE__, y)
 
 #endif

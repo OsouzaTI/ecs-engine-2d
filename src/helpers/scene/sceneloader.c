@@ -105,10 +105,7 @@ void printObjectSceneLoader(ObjectSceneLoader* objectSceneLoader) {
 void sceneLoader(ObjectManager* objectManager, Display* display, const char* filePath) {
 
     FILE* file = fopen(filePath, "r");
-    if(ISNULL(file)){
-        printf("erro ao ler mapa\n");
-        exit(1);
-    }
+    ALLOCATE_MEMORY_ERROR(file, "SceneLoader (file)");
     
     char buffer[1024];
     while (1) {
@@ -208,7 +205,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                             fscanf(file, "%s", objectSceneLoader->spriteName);                            
                         } else if(strcmp(buffer, ">_ANIMATION_SPRITE") == 0) {
                             struct animation_sprite2d_helper* helper = &objectSceneLoader->AnimationSprite2DHelper;
-                            fscanf(file, "%d %f", helper->frames, helper->speed);
+                            fscanf(file, "%d %f", &helper->frames, &helper->speed);
                             objectSceneLoader->hasAnimationSprite2D = 1;
                         } 
 

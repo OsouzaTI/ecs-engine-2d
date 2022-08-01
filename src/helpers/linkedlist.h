@@ -24,6 +24,8 @@ LinkedList* createLinkedList();
 Node* createNode(void* data);
 void pushLinkedList(LinkedList* linkedlist, Node* node);
 
-void linkedListDestroyRecursivelyNodes(Node* node);
+void linkedListDestroyRecursivelyNodes(Node** node);
 void destroyLinkedList(LinkedList** linkedlist);
+
+int linkedListMemoryAllocated(LinkedList* linkedList);
 #endif

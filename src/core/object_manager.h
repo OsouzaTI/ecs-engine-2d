@@ -24,5 +24,6 @@ void updateAllObjectsInManager(ObjectManager* objectManager);
 Object2D* getObject2DByTokenIdentifier(ObjectManager* objectManager, char* tokenIdentifier);
 CollisionEvent _firstBoxCollider2DTriggered(ObjectManager* objectManager, Object2D* object2D); 
 void destroyObjectManager(ObjectManager** objectManager);
+int objectManagerMemoryAllocated(ObjectManager* objectManager);
 
 #endif

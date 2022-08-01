@@ -12,14 +12,14 @@
 RatPopulation* ratPopulation = NULL;
 
 //-------- CALLBACK GAMELOOP ----------// 
-
+float globalScale = 1;
 void inputCallback(SDL_Event* event) {
     if(event->type == SDL_KEYDOWN){
         switch (event->key.keysym.sym)
         {    
             case SDLK_SPACE:{
                 printf("oi\n");
-            }break;             
+            }break;        
         }
     } 
 }
@@ -64,6 +64,10 @@ void updateCallback(Display* display) {
 int main(int argc, char *argv[]) {
 
     Display* display = initScreen("Teste", 640, 640);
+    setDisplayCamera2D(display, 640, 640);
+    setCamera2DVelocity(DPGC2D(display), 4, 4);
+    setCamera2DMoveKeys(DPGC2D(display), SDLK_w, SDLK_d, SDLK_s, SDLK_a);
+
     ObjectManager* objectManager = createObjectManager(display);
     
     sceneLoader(objectManager, display, "scene.txt");  
@@ -73,6 +77,16 @@ int main(int argc, char *argv[]) {
     Text2D* text = createText2D(display, "...", 10, 600, 360, 24);
     setText2DUpdateCallback(text, textUpdate);
     addObjectToManager(objectManager, VOID(text));
+
+    char buff[20];
+    sprintf(buff, "%d bytes", hashTableMemoryAllocated(assets));
+    LOGINF2("Assets size: ", buff);
+
+    sprintf(buff, "%d bytes", hashTableMemoryAllocated(fonts));
+    LOGINF2("Fonts size: ", buff);
+
+    sprintf(buff, "%d bytes", objectManagerMemoryAllocated(objectManager));
+    LOGINF2("Objects size: ", buff);
 
     while(display->run) {
         // cor de fundo
@@ -87,6 +101,9 @@ int main(int argc, char *argv[]) {
         updateAllObjectsInManager(objectManager);        
         // render object manager
         renderAllObjectsInManager(objectManager);
+
+        SDL_RenderSetScale(display->renderer, globalScale, globalScale);
+
         // chamadas de renderização        
         render(display);       
     }

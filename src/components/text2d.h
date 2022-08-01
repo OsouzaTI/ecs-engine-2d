@@ -39,4 +39,6 @@ void renderText2D(Display* display, Text2D* text2D);
 
 // TODO: Destroy text2d
 
+int text2dMemoryAllocated(Text2D* text2D);
+
 #endif

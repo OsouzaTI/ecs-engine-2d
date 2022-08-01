@@ -18,6 +18,9 @@ Display* createDisplay(SDL_Color* defaulClearColor) {
         display->clearColor = (SDL_Color){255, 255, 255, 255};
     }
 
+    // inicializando components
+    display->Components.camera2D = NULL;
+
     // frame rate fix
     display->FPS = 0;           
     display->frameRate = 1000.0f / 60;
@@ -86,6 +89,13 @@ int input(Display* display, InputCallbackEvent inputCallback){
         // printf("event: %d\n", event->type);
         if(event->type == SDL_QUIT)
             display->run = 0;
+
+        // input callback components
+        if(NOTNULL(display->Components.camera2D)) {
+            inputCamera2D(display->Components.camera2D, event);
+        }
+
+        // input callback
         inputCallback(event);
     }
 }
@@ -94,6 +104,13 @@ int input(Display* display, InputCallbackEvent inputCallback){
 void update(Display* display, UpdateCallbackEvent updateCallback) {
     _fixFrameRate(display);
     _updateMousePosition(display);
+    
+    // input callback components
+    if(NOTNULL(display->Components.camera2D)) {
+        updateCamera2D(display->Components.camera2D, display);
+    }
+
+    // update callback
     updateCallback(display);
 }
 
@@ -104,6 +121,10 @@ void render(Display* display) {
 
 void clearScreen(Display* display) {
     SDL_RenderClear(display->renderer);
+}
+
+Camera2D* getDisplayCamera2D(Display* display) {
+    return display->Components.camera2D;
 }
 
 // Helpers
@@ -118,6 +139,10 @@ void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
 
 void setDisplayTitle(Display* display, const char* title) {
     SDL_SetWindowTitle(display->window, title);
+}
+
+void setDisplayCamera2D(Display* display, int width, int height) {    
+    display->Components.camera2D = createCamera2D(0, 0, width, height);
 }
 
 void _updateMousePosition(Display* display) {
