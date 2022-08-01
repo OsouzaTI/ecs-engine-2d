@@ -19,6 +19,10 @@ void freeHashTable(HashTable* hashtable) {
 
 HashTable* createHashTable(int N) {
     HashTable* hashtable = (HashTable*)malloc(sizeof(HashTable));
+    if(hashtable == NULL){
+        printf("Erro ao alocar memoria para tabela hash.\n");
+    }
+
     hashtable->size = 0;
     hashtable->N = N;
     hashtable->data = (HashNode**)malloc(sizeof(HashNode*) * N);

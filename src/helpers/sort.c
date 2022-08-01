@@ -9,7 +9,6 @@ int _partition(void* V, int lo, int hi, int size, ComparationSortFunction cmp, S
     int j = hi;
     while(1)
     {
-
         while(cmp(V+VOFFSET(i,size), V+VOFFSET(lo,size)) == -1)
         {
             i++;
@@ -39,6 +38,38 @@ void quickSort(void* V, int lo, int hi, int size, ComparationSortFunction cmp, S
     quickSort(V, lo, p - 1, size, cmp, swp);
     quickSort(V, p + 1, hi, size, cmp, swp);
 
+}
+
+int _partitionDPointer(void** V, int lo, int hi, ComparationSortFunction cmp, SwapSortFunction swp){
+    int i = lo + 1;
+    int j = hi;
+    while(1)
+    {
+        while(cmp(V[i], V[lo]) == -1)
+        {
+            i++;
+            if(i >= hi) break;
+        }
+
+        while (cmp(V[j], V[lo]) >= 0)
+        {
+            j--;
+            if(j == lo) break;
+        }
+        
+        if(i >= j) break;
+        swp(V[i], V[j]);
+        
+    }
+    swp(V[lo], V[j]);
+    return j;
+}
+
+void quickSortDPointer(void** V, int lo, int hi, ComparationSortFunction cmp, SwapSortFunction swp) {
+    if(lo >= hi) return;
+    int p = _partitionDPointer(V, lo, hi, cmp, swp);
+    quickSortDPointer(V, lo, p - 1, cmp, swp);
+    quickSortDPointer(V, p + 1, hi, cmp, swp);
 }
 
 #ifdef SORT_DEBUG

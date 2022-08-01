@@ -1,10 +1,13 @@
 #include "transform.h"
 
 Transform* createTransform(float x, float y, int width, int height) {
-    Transform* transform = (Transform*)malloc(sizeof(Transform));    
+    Transform* transform = (Transform*)malloc(sizeof(Transform)); 
+    ALLOCATE_MEMORY_ERROR(transform, "Transform");
+
     transform->force = 0.0f;
     transform->angle = 0.0f;  
     setVector2D(&transform->position, x, y);
+    setVector2D(&transform->scale, 1, 1);
     setVector2D(&transform->size, width, height);
     setVector2D(&transform->velocity, 0.0f, 0.0f);
     setVector2D(&transform->direction, 0.0f, 0.0f);
@@ -41,6 +44,10 @@ void setTransformAngle(Transform* transform, float angle) {
     transform->angle = angle;
 }
 
+void setTransformScale(Transform* transform, float x, float y) {
+    setVector2D(&transform->scale, x, y);
+}
+
 Vector2D* getTransformSize(Transform* transform){
     return &transform->size;
 }
@@ -55,6 +62,10 @@ Vector2D* getTransformVelocity(Transform* transform) {
 
 Vector2D* getTransformDirection(Transform* transform){
     return &transform->direction;
+}
+
+Vector2D* getTransformScale(Transform* transform) {
+    return &transform->scale;
 }
 
 float getTransformAngle(Transform* transform) {

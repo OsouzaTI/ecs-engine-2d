@@ -2,8 +2,9 @@
 
 BoxCollider2D* createBoxCollider2D(Transform* transform) {
     BoxCollider2D* boxcollider2D = (BoxCollider2D*)malloc(sizeof(BoxCollider2D));
+    ALLOCATE_MEMORY_ERROR(boxcollider2D, "boxcollider2D");
+
     boxcollider2D->transform = transform;
-    boxcollider2D->scale = 1;
     boxcollider2D->tag = COLLISION_TAG_0;
     boxcollider2D->color = (SDL_Color){0, 255, 0, 255};
     boxcollider2D->_defaultColor = boxcollider2D->color;
@@ -19,18 +20,12 @@ void updateBoxCollider2D(BoxCollider2D* boxcollider2D) {
     Transform* tfBoxCollide2D = boxcollider2D->transform;
     Vector2D* tfPos = getTransformPosition(tfBoxCollide2D);
     Vector2D* tfSize = getTransformSize(tfBoxCollide2D);
+    Vector2D* tfScale = getTransformScale(tfBoxCollide2D);
 
-    float scale = boxcollider2D->scale;
-    boxcollider2D->rect.w = (int)(tfSize->x * scale);
-    boxcollider2D->rect.h = (int)(tfSize->y * scale);
-    if(scale > 1) {
-        boxcollider2D->rect.x = (int)(tfPos->x - (tfSize->x *  .25f));
-        boxcollider2D->rect.y = (int)(tfPos->y - (tfSize->y * .25f));
-    } else {
-        boxcollider2D->rect.x = (int)tfPos->x;
-        boxcollider2D->rect.y = (int)tfPos->y;
-    }
-
+    boxcollider2D->rect.w = (int)(tfSize->x * tfScale->x);
+    boxcollider2D->rect.h = (int)(tfSize->y * tfScale->y);
+    boxcollider2D->rect.x = (int)(tfPos->x);
+    boxcollider2D->rect.y = (int)(tfPos->y);
 }
 
 void destroyBoxCollider2D(BoxCollider2D* boxcollider2D) {

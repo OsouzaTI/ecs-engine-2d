@@ -2,6 +2,8 @@
 
 ObjectManager* createObjectManager(Display* display) {
     ObjectManager* objectManager = (ObjectManager*)malloc(sizeof(ObjectManager));
+    ALLOCATE_MEMORY_ERROR(objectManager, "ObjectManager");
+
     objectManager->display = display;
     objectManager->objects = createLinkedList();
     return objectManager;

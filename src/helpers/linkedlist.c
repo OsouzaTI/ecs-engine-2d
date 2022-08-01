@@ -2,12 +2,19 @@
 
 LinkedList* createLinkedList() {
     LinkedList* linkedlist = (LinkedList*)malloc(sizeof(LinkedList));
+    if(linkedlist == NULL){
+        printf("Erro ao alocar memoria para lista lincada.\n");
+    }
     linkedlist->size = 0;
     return linkedlist;
 }
 
 Node* createNode(void* data) {
     Node* node = (Node*)malloc(sizeof(Node));
+    if(node == NULL){
+        printf("Erro ao alocar memoria para node da lista lincada.\n");
+    }
+
     node->data = data;
     node->next = NULL;
     return node;

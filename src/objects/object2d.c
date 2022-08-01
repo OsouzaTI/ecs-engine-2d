@@ -2,6 +2,8 @@
 
 Object2D* createObject2D(Display* display, float x, float y, int width, int height) {
     Object2D* object2D = (Object2D*)malloc(sizeof(Object2D));
+    ALLOCATE_MEMORY_ERROR(object2D, "Object2D");
+
     object2D->_objectType = OBJECT2D;
     object2D->objectId = OBJECT_ID++;
     object2D->renderCollider = 0;
@@ -11,10 +13,11 @@ Object2D* createObject2D(Display* display, float x, float y, int width, int heig
     // Events 
     object2D->Events.update = NULL;
     object2D->Events.boxCollision2DEvent = NULL;
+    
     // Components
     object2D->Components.transform = createTransform(x, y, width, height);    
     object2D->Components.boxcollider2D = NULL;
-    object2D->Components.sprite2D = NULL;
+    object2D->Components.sprite2D = NULL;    
     return object2D;
 }
 
@@ -28,7 +31,7 @@ void setObjectBoxCollision2DEvent(Object2D* object2D, ObjectBoxCollision2DEvent 
 
 // GETTERS - SETTERS
 
-void setSpriteObject2D(Display* display, Object2D* object2D, const char* filePath) {
+void setObject2DSprite(Display* display, Object2D* object2D, const char* filePath) {
     Sprite2D* sprite2d = createSprite2D(display, filePath, getTransformFromObject2D(object2D));
     object2D->Components.sprite2D = sprite2d;
 }
@@ -79,6 +82,10 @@ void setObject2DDirection(Object2D* object2D, float x, float y) {
     setTransformDirection(OBJ2DGTF(object2D), x, y);
 }
 
+void setObject2DScale(Object2D* object2D, float x, float y) {
+    setTransformScale(OBJ2DGTF(object2D), x, y);
+}
+
 void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier) {
     strcpy(object2D->tokenIdentifier, tokenIdentifier);
 }
@@ -87,6 +94,14 @@ void setObject2DOwner(Object2D* object2D, int index, void* owner) {
     if(index < OBJECT2D_OWNERS_SIZE) {
         object2D->Owner.owner[index] = owner;
     }
+}
+
+void setObject2DAnimationSprite2D(Object2D* object2D, int frames, float speed) {
+    setSprite2DAnimation2D(OBJ2DGSPR(object2D), frames, speed);
+}
+
+void setObject2DRenderBoxCollider2D(Object2D* object2D, int render) {
+    object2D->renderCollider = render;
 }
 
 // destroy

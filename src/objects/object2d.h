@@ -1,5 +1,5 @@
-#ifndef OBJECT2D_H
-#define OBJECT2D_H
+#ifndef OBJECTS_OBJECT2D_H
+#define OBJECTS_OBJECT2D_H
 
 #include <string.h>
 #include <core/constants.h>
@@ -51,7 +51,7 @@ typedef struct object2d
 
 
 Object2D* createObject2D(Display* display, float x, float y, int width, int height);
-void setSpriteObject2D(Display* display, Object2D* object2D, const char* filePath);
+void setObject2DSprite(Display* display, Object2D* object2D, const char* filePath);
 void setBoxCollider2D(Object2D* object2D);
 void renderObject2D(Display* display, Object2D* object2D);
 
@@ -68,8 +68,11 @@ void setObject2DPosition(Object2D* object2D, float x, float y);
 void setObject2DSize(Object2D* object2D, float x, float y);
 void setObject2DVelocity(Object2D* object2D, float x, float y);
 void setObject2DDirection(Object2D* object2D, float x, float y);
+void setObject2DScale(Object2D* object2D, float x, float y);
 void setObject2DTokenIdentifier(Object2D* object2D, const char* tokenIdentifier);
 void setObject2DOwner(Object2D* object2D, int index, void* owner);
+void setObject2DAnimationSprite2D(Object2D* object2D, int frames, float speed);
+void setObject2DRenderBoxCollider2D(Object2D* object2D, int render);
 // destroy
 void destroyObject2D(Object2D* object2D);
 

@@ -1,5 +1,5 @@
-#ifndef ASSETS_H
-#define ASSETS_H
+#ifndef CORE_ASSETS_H
+#define CORE_ASSETS_H
 
 #include <stdio.h>
 #include <string.h>

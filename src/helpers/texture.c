@@ -2,11 +2,10 @@
 
 SDL_Texture* loadTexture(Display* display, const char* filePath) {
     SDL_Surface* surface = IMG_Load(filePath);
+    ALLOCATE_MEMORY_ERROR(surface, "SDL_Surface");
     SDL_Texture* texture = SDL_CreateTextureFromSurface(display->renderer, surface);
-    if(texture == NULL) {
-        logError("Nao foi possivel criar a textura");
-        exit(-1);
-    }
+    ALLOCATE_MEMORY_ERROR(texture, "SDL_Texture");
+
     SDL_FreeSurface(surface);
     return texture;
 }

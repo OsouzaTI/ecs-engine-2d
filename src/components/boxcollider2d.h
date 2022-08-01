@@ -16,7 +16,6 @@ typedef struct boxcollider2D
     SDL_Rect rect;
     SDL_Color color;
     SDL_Color _defaultColor;
-    float scale;
 } BoxCollider2D;
 
 BoxCollider2D* createBoxCollider2D(Transform* transform);

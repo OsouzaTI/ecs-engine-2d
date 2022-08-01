@@ -2,6 +2,8 @@
 
 ObjectSceneLoader* createObjectSceneLoader() {
     ObjectSceneLoader* objectSceneLoader = (ObjectSceneLoader*)malloc(sizeof(ObjectSceneLoader));
+    ALLOCATE_MEMORY_ERROR(objectSceneLoader, "ObjectSceneLoader");
+
     // has attributes
     objectSceneLoader->hasSize = 0;
     objectSceneLoader->hasPosition = 0;
@@ -9,6 +11,8 @@ ObjectSceneLoader* createObjectSceneLoader() {
     objectSceneLoader->hasTokenIdentifier = 0;
     objectSceneLoader->hasVelocity = 0;
     objectSceneLoader->hasDirection = 0;
+    objectSceneLoader->hasScale = 0;
+    objectSceneLoader->hasAnimationSprite2D = 0;
 
     objectSceneLoader->collisionTag = COLLISION_TAG_0;
     objectSceneLoader->renderBoxCollider2D = 0; 
@@ -43,9 +47,10 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
     }
 
     // setando sprite component
-    setSpriteObject2D(display, object2D, getAsset(objectSceneLoader->spriteName));
+    setObject2DSprite(display, object2D, getAsset(objectSceneLoader->spriteName));
    
     Vector2D* size = &objectSceneLoader->size;
+    Vector2D* scale = &objectSceneLoader->scale;
     Vector2D* pos = &objectSceneLoader->position;
     Vector2D* velocity = &objectSceneLoader->velocity;
     Vector2D* direction = &objectSceneLoader->direction;
@@ -53,6 +58,11 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
     // definindo tamanho
     if(objectSceneLoader->hasSize){
         setObject2DSize(object2D, size->x, size->y);
+    }
+
+    // definindo escala
+    if(objectSceneLoader->hasScale){
+        setObject2DScale(object2D, scale->x, scale->y);
     }
 
     // definindo posicao inicial
@@ -65,6 +75,7 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
         setObject2DVelocity(object2D, velocity->x, velocity->y);
     }
 
+    // definindo direção
     if(objectSceneLoader->hasDirection) {
         setObject2DDirection(object2D, direction->x, direction->y);
     }
@@ -72,6 +83,15 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
     // definindo token de identificação
     if(objectSceneLoader->hasTokenIdentifier) {
         setObject2DTokenIdentifier(object2D, objectSceneLoader->tokenIdentifier);
+    }
+
+    // setando animação no sprite2D
+    if(objectSceneLoader->hasAnimationSprite2D) {
+        setObject2DAnimationSprite2D(
+            object2D, 
+            objectSceneLoader->AnimationSprite2DHelper.speed,
+            objectSceneLoader->AnimationSprite2DHelper.frames
+        );
     }
 
 }
@@ -89,10 +109,9 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
         printf("erro ao ler mapa\n");
         exit(1);
     }
-
-    while (1) {
     
-        char buffer[1024];
+    char buffer[1024];
+    while (1) {
 
         int res = fscanf(file, "%s", buffer);
         if (res == EOF)
@@ -118,7 +137,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
         } else if(strcmp(buffer, "ASSET_PATH_SEPARATOR") == 0) {
             char separator[2];
             fscanf(file, "%s", separator);
-            setAssetPathSeparator(separator);
+            setAssetPathSeparator(separator);            
         } else if(strcmp(buffer, "MAP_START") == 0) {
             
             // helpers
@@ -149,6 +168,11 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                             fscanf(file, "%f %f", &x, &y);
                             setVector2D(&objectSceneLoader->size, x, y);
                             objectSceneLoader->hasSize = 1;
+                        } else if(strcmp(buffer, ">_SCALE") == 0){
+                            float x, y;
+                            fscanf(file, "%f %f", &x, &y);
+                            setVector2D(&objectSceneLoader->scale, x, y);
+                            objectSceneLoader->hasScale = 1;
                         } else if(strcmp(buffer, ">_POSITION") == 0){
                             float x, y;
                             fscanf(file, "%f %f", &x, &y);
@@ -182,6 +206,10 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                             }
                         } else if(strcmp(buffer, ">_SPRITE_NAME") == 0) {
                             fscanf(file, "%s", objectSceneLoader->spriteName);                            
+                        } else if(strcmp(buffer, ">_ANIMATION_SPRITE") == 0) {
+                            struct animation_sprite2d_helper* helper = &objectSceneLoader->AnimationSprite2DHelper;
+                            fscanf(file, "%d %f", helper->frames, helper->speed);
+                            objectSceneLoader->hasAnimationSprite2D = 1;
                         } 
 
                     }

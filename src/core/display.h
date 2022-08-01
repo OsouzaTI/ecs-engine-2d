@@ -22,7 +22,9 @@ typedef struct display {
     Vector2D size;
     Mouse mouse;
 
-    // frame rate fix
+    // frame rate in runtime
+    float FPS;
+    // frame rate esperado default(60)
     float frameRate;
     int previousFrameTime;
     float deltaTime;
@@ -86,6 +88,7 @@ void clearScreen(Display* display);
 
 //------> helpers
 void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
+void setDisplayTitle(Display* display, const char* title);
 
 void _updateMousePosition(Display* display);
 void _fixFrameRate(Display* display);

@@ -1,6 +1,7 @@
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#ifndef HELPERS_LINKEDLIST_H
+#define HELPERS_LINKEDLIST_H
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <core/constants.h>
 

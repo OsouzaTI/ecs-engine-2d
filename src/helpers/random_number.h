@@ -1,5 +1,5 @@
-#ifndef RANDOM_NUMBER_H
-#define RANDOM_NUMBER_H
+#ifndef HELPERS_RANDOM_NUMBER_H
+#define HELPERS_RANDOM_NUMBER_H
 
 #include <stdlib.h>
 #include <time.h>

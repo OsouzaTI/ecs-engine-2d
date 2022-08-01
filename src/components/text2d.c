@@ -1,19 +1,19 @@
 #include "text2d.h"
 
 
-Text2D* createText2D(Display* display, const char* text, int x, int y, int width, int height){
+Text2D* createText2D(Display* display, char* text, int x, int y, int width, int height){
 
     Text2D* text2D = (Text2D*)malloc(sizeof(Text2D));
+    ALLOCATE_MEMORY_ERROR(text2D, "Text2D");
+
     text2D->_objectType = TEXT2D;
     text2D->objectId = OBJECT_ID++;
     setVector2D(&text2D->size, width, height);
     setVector2D(&text2D->position, x, y);
 
-    text2D->text = (char*)malloc(sizeof(char)*strlen(text));
     strcpy(text2D->text, text);
 
-    // TODO: fonte 
-    SDL_Surface* textSurface = TTF_RenderText_Blended(getFont("minecraft"), text2D->text, SDLC_WHITE);
+    SDL_Surface* textSurface = TTF_RenderText_Blended(getFont("arial"), text2D->text, SDLC_WHITE);
     if(ISNULL(textSurface)){
         printf("nao foi possivel criar a surface do label\n");
         return NULL;
@@ -25,9 +25,8 @@ Text2D* createText2D(Display* display, const char* text, int x, int y, int width
     return text2D;
 }
 
-void setText2DText(Display* display, Text2D* text2D, const char* text){
-    
-    text2D->text = (char*)realloc(text2D->text, sizeof(char)*(strlen(text)+1));
+void setText2DText(Display* display, Text2D* text2D, char* text){
+
     strcpy(text2D->text, text);
 
     SDL_Surface* textSurface = TTF_RenderText_Blended(getFont("arial"), text2D->text, SDLC_WHITE);

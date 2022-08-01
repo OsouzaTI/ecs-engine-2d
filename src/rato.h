@@ -1,8 +1,9 @@
 #ifndef RATO_H
-#define RATO_H
+// #define RATO_H
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <objects/object2d.h>
 #include <core/object_manager.h>
 #include <core/assets.h>
@@ -11,10 +12,11 @@
 #define RAT_SPRITE "ball"
 
 // população
-#define N_POPULATION 10
+#define N_POPULATION 600
 #define N_CROMOSSOMOS 600
-#define CROSS 0.15f
-#define MUTATION 0.01f
+#define CROSS 0.35f
+#define MUTATION 0.03f
+#define RESET_TIMER_SECONDS 50
 
 // entidade Rat
 typedef struct rat
@@ -29,6 +31,10 @@ typedef struct rat
          * 1 -> RIGHT
          * 2 -> DOWN
          * 3 -> LEFT
+         * 4 -> UP_RIGHT
+         * 5 -> DOWN_RIGHT
+         * 6 -> DOWN_LEFT
+         * 7 -> LEFT_UP
          */
         int geneticCode[2][N_CROMOSSOMOS];
         int geneticIndex;
@@ -45,7 +51,8 @@ typedef struct rat_population
     int alives;
     int generation;
     int winners;
-    int timer;
+    time_t time;
+    time_t reset;
     Rat population[N_POPULATION];
 } RatPopulation;
 
@@ -57,14 +64,13 @@ void ratCross(Rat* a, Rat* b, Rat* c) {
     for (int i = 0; i < N_CROMOSSOMOS; i++)
     {
         if(obterNumeroUniforme() < MUTATION) {
-            c->Cromossomos.geneticCode[0][i] = (int)(obterNumeroUniforme() * 4);
+            c->Cromossomos.geneticCode[0][i] = (int)(obterNumeroUniforme() * 8);
         } else {
             if(obterNumeroUniforme() < 0.5) {
                 c->Cromossomos.geneticCode[0][i] = a->Cromossomos.geneticCode[1][i];
             } else {
                 c->Cromossomos.geneticCode[0][i] = b->Cromossomos.geneticCode[1][i];
             }
-
         }
     }
 }
@@ -92,11 +98,6 @@ void newGenRatPopulation(RatPopulation* rp) {
 
     quickSort((void*)rp->population, 0, N_POPULATION - 1, sizeof(Rat), ratCmp, ratSwp);
 
-    // for (int i = 0; i < N_POPULATION; i++)
-    // {
-    //     printf("[%d]: %.3f\n", i, rp->population[i].fitness);
-    // }
-
     // cria uma copia do material genetico de todos os cromossomos
     for (int i = 0; i < N_POPULATION; i++)
     {
@@ -111,8 +112,7 @@ void newGenRatPopulation(RatPopulation* rp) {
     for (int i = 0; i < N_POPULATION; i++)
     {
         int individuoA = N_POPULATION * CROSS * obterNumeroUniforme();
-        int individuoB = N_POPULATION * CROSS * obterNumeroUniforme();
-        // printf("AxB -> (%d)x(%d)\n", individuoA, individuoB);
+        int individuoB = N_POPULATION * CROSS * obterNumeroUniforme();        
         Rat *a, *b;
         a = &rp->population[individuoA];
         b = &rp->population[individuoB];
@@ -125,6 +125,7 @@ void resetRatPopulation(RatPopulation* rp) {
     rp->alives = N_POPULATION;
     rp->finish = 0;
     rp->winners = 0;
+    rp->reset = time(NULL);
     // inicializando o codigo genetico de maneira aleatoria
     for (int i = 0; i < N_POPULATION; i++)
     {
@@ -146,22 +147,46 @@ void ratUpdate(void* rat, Display* display) {
     Rat* r = (Rat*)getObject2DOwner(rat, 0);
     RatPopulation* rp = (RatPopulation*)getObject2DOwner(rat, 1);
 
-    if(!r->Cromossomos.alive) return;
-
-    if(rp->timer > 10000) {
+    if(difftime(time(NULL), rp->reset) > RESET_TIMER_SECONDS) {
         rePopulation(rp);
-        return;
     }
+
+
+    if(!r->Cromossomos.alive) return;
 
     Vector2D* pos = &ratTrasform->position;
     
     int* geneticIndex = &r->Cromossomos.geneticIndex;
     switch (r->Cromossomos.geneticCode[0][(*geneticIndex)%200])
     {
-        case 0: pos->y-=1.0f; break; // UP               
-        case 1: pos->x+=1.0f; break; // RIGHT                  
-        case 2: pos->y+=1.0f; break; // DOWN
-        case 3: pos->x-=1.0f; break; // LEFT
+        case 0:{
+            pos->y-=1.0f;
+        } break; // UP               
+        case 1:{
+            pos->x+=1.0f;
+        } break; // RIGHT                  
+        case 2:{
+            pos->y+=1.0f;
+        } break; // DOWN
+        case 3:{
+            pos->x-=1.0f;
+        } break; // LEFT
+        case 4:{
+            pos->x+=1.0f;
+            pos->y-=1.0f;
+        } break; // UP_RIGHT
+        case 5:{
+            pos->y+=1.0f;
+            pos->x+=1.0f;
+        } break; // DOWN_RIGHT
+        case 6:{
+            pos->x-=1.0f;
+            pos->y+=1.0f;
+        } break; // DOWN_LEFT
+        case 7:{
+            pos->x-=1.0f;
+            pos->y-=1.0f;
+        } break; // LEFT_UP
         default:
             break;
     }
@@ -175,8 +200,6 @@ void rePopulation(RatPopulation* rp) {
     newGenRatPopulation(rp);
     resetRatPopulation(rp);
     rp->generation++;
-    // reseta o tempo
-    rp->timer = 0;
 }
 
 // colisao
@@ -207,6 +230,8 @@ void initRatPopulation(RatPopulation* rp, ObjectManager* objectManager) {
     rp->finish = 0;
     rp->generation = 1;
     rp->winners = 0;
+    rp->time = time(NULL);
+    rp->reset = time(NULL);
     for (int i = 0; i < N_POPULATION; i++)
     {
         rp->population[i].fitness = 0;
@@ -215,17 +240,18 @@ void initRatPopulation(RatPopulation* rp, ObjectManager* objectManager) {
         // inicializando o codigo genetico de maneira aleatoria
         for (int j = 0; j < N_CROMOSSOMOS; j++)
         {
-            rp->population[i].Cromossomos.geneticCode[0][j] = (int)(obterNumeroUniforme() * 4);
+            rp->population[i].Cromossomos.geneticCode[0][j] = (int)(obterNumeroUniforme() * 8);
         }
         
         /**
          *  criando entidades do tipo objeto2D que
          * representara o rato na engine
          */        
-        rp->population[i].objRat = createObject2D(objectManager->display, 32, 32, 16, 16);        
+        rp->population[i].objRat = createObject2D(objectManager->display, 0, 0, 16, 16);        
         Object2D* rat = rp->population[i].objRat;
         Transform* tf = OBJ2DGTF(rat);
         setBoxCollider2D(rat);        
+        setObject2DRenderBoxCollider2D(rat, 1);
         setBoxCollider2DTag(OBJ2DGBC(rat), COLLISION_TAG_1);        
         setBoxCollider2DTagCollisionWith(OBJ2DGBC(rat), COLLISION_TAG_0, COLLISION_ENABLED);            
         setObjectBoxCollision2DEvent(rat, ratCollision);
@@ -235,9 +261,16 @@ void initRatPopulation(RatPopulation* rp, ObjectManager* objectManager) {
         setObject2DPosition(rat, tfInicio->position.x, tfInicio->position.y);
 
         // setando sprite        
-        setSpriteObject2D(objectManager->display, rat, getAsset(RAT_SPRITE));        
-        setObject2DUpdateCallback(rat, ratUpdate);
+        setObject2DSprite(objectManager->display, rat, getAsset(RAT_SPRITE));        
         
+        // setando animação
+        // setObject2DAnimationSprite2D(rat, 4, 10.0f);
+        setObject2DScale(rat, 0.6f, 0.6f);
+
+        // funcao de update do objeto
+        setObject2DUpdateCallback(rat, ratUpdate);
+               
+
         // guardando referencia do owner
         setObject2DOwner(rat, 0, (void*)&rp->population[i]);
         setObject2DOwner(rat, 1, (void*)rp);

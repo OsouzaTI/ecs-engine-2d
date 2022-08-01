@@ -3,6 +3,7 @@
 
 #include <math.h>
 #include <SDL2/SDL.h>
+#include "log.h"
 
 #define ISNULL(x) (x == NULL)
 #define NOTNULL(x) !ISNULL(x)

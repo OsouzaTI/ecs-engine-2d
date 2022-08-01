@@ -16,9 +16,12 @@ typedef struct object_scene_loader
     int hasPosition;
     int hasVelocity;
     int hasDirection;
+    int hasScale;
+    int hasAnimationSprite2D;
     int hasBoxCollider2D;
     int hasTokenIdentifier;
     Vector2D size;
+    Vector2D scale;
     Vector2D position;
     Vector2D velocity;
     Vector2D direction;
@@ -28,6 +31,15 @@ typedef struct object_scene_loader
     int renderBoxCollider2D;
     int collisionTag;
     int collisionTags[N_COLLISION_TAGS];
+    
+    // helpers
+    struct animation_sprite2d_helper
+    {
+        float speed;
+        int frames;
+    } AnimationSprite2DHelper;
+    
+
 } ObjectSceneLoader;
 
 ObjectSceneLoader* createObjectSceneLoader();

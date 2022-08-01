@@ -2,6 +2,8 @@
 
 Display* createDisplay(SDL_Color* defaulClearColor) {
     Display* display = (Display*)malloc(sizeof(Display));
+    ALLOCATE_MEMORY_ERROR(display, "Display");
+
     display->run = 0;
     display->size = (Vector2D){0, 0};
     display->renderer = NULL;
@@ -17,7 +19,8 @@ Display* createDisplay(SDL_Color* defaulClearColor) {
     }
 
     // frame rate fix
-    display->frameRate = 60 / 1000.0f;
+    display->FPS = 0;           
+    display->frameRate = 1000.0f / 60;
     display->previousFrameTime = 0;
     display->deltaTime = 0.0f;
     return display;
@@ -31,10 +34,10 @@ void destroyDisplay(Display** display) {
 }
 
 Display* initScreen(const char* title, int width, int height) {
-    logInfo("Inicializando SDL");
+    LOGINF("Inicializando SDL");
     if((SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) == -1)) {
-        logError("Nao foi possivel inicializar o SDL");
-        logError(SDL_GetError());
+        LOGERR("Nao foi possivel inicializar o SDL");
+        LOGERR(SDL_GetError());
         exit(-1);
     }
 
@@ -51,20 +54,20 @@ Display* initScreen(const char* title, int width, int height) {
         // handle error
     }
 
-    logInfo("SDL inicializado");    
+    LOGINF("SDL inicializado");    
 
     Display* display = createDisplay(NULL);
     display->size = (Vector2D){ width, height };
-
+    
     display->window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
     if(display->window == NULL) {
-        logError("Nao foi possivel inicializar a janela");
+        LOGERR("Nao foi possivel inicializar a janela");
         exit(-1);
     }
 
     display->renderer = SDL_CreateRenderer(display->window, -1, 0);
     if(display->renderer == NULL) {
-        logError("Nao foi possivel inicializar o renderer");
+        LOGERR("Nao foi possivel inicializar o renderer");
         exit(-1);
     }
 
@@ -113,6 +116,10 @@ void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a)
     SDL_SetRenderDrawColor(display->renderer, clearColor->r, clearColor->g, clearColor->b, clearColor->a);
 }
 
+void setDisplayTitle(Display* display, const char* title) {
+    SDL_SetWindowTitle(display->window, title);
+}
+
 void _updateMousePosition(Display* display) {
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -127,5 +134,6 @@ void _updateMousePosition(Display* display) {
 void _fixFrameRate(Display* display) {
     while (!SDL_TICKS_PASSED(SDL_GetTicks(), display->previousFrameTime + display->frameRate));
     display->deltaTime = (SDL_GetTicks() - display->previousFrameTime) / 1000.0f;
+    display->FPS = 1000.0f / (SDL_GetTicks() - display->previousFrameTime);
     display->previousFrameTime = SDL_GetTicks();
 }
