@@ -149,8 +149,11 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                     fscanf(file, "%d", &SIZE);
                 } if (strcmp(buffer, "#CAMERA2D") == 0) {
                     int x, y;
-                    float z;
-                    fscanf(file, "%d %d %f", &SIZE);
+                    float z, w;
+                    fscanf(file, "%d %d %f %f", &x, &y, &z, &w);
+                    // setando a camera2d
+                    setDisplayCamera2D(display, x, y);
+                    setCamera2DVelocity(DPGC2D(display), z, w);
                 } else if(strcmp(buffer, "#OBJECT_START") == 0){
                     
                     ObjectSceneLoader* objectSceneLoader = createObjectSceneLoader();

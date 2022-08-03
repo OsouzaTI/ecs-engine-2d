@@ -64,9 +64,9 @@ void updateCallback(Display* display) {
 int main(int argc, char *argv[]) {
 
     Display* display = initScreen("Teste", 640, 640);
-    setDisplayCamera2D(display, 640, 640);
-    setCamera2DVelocity(DPGC2D(display), 4, 4);
-    setCamera2DMoveKeys(DPGC2D(display), SDLK_w, SDLK_d, SDLK_s, SDLK_a);
+    // setDisplayCamera2D(display, 640, 640);
+    // setCamera2DVelocity(DPGC2D(display), 4, 4);
+    // setCamera2DMoveKeys(DPGC2D(display), SDLK_w, SDLK_d, SDLK_s, SDLK_a);
 
     ObjectManager* objectManager = createObjectManager(display);
     

@@ -6,10 +6,10 @@ Camera2D* createCamera2D(int x, int y, int width, int height){
     camera2D->viewport = (SDL_Rect) {x, y, width, height};
     
     // default move camera keys
-    camera2D->MOVE_KEYS[0] = SDLK_UP;
-    camera2D->MOVE_KEYS[1] = SDLK_RIGHT;
-    camera2D->MOVE_KEYS[2] = SDLK_DOWN;
-    camera2D->MOVE_KEYS[3] = SDLK_LEFT;
+    camera2D->MOVE_KEYS[ENGINE_KEY_UP] = SDLK_UP;
+    camera2D->MOVE_KEYS[ENGINE_KEY_RIGHT] = SDLK_RIGHT;
+    camera2D->MOVE_KEYS[ENGINE_KEY_DOWN] = SDLK_DOWN;
+    camera2D->MOVE_KEYS[ENGINE_KEY_LEFT] = SDLK_LEFT;
 
     setVector2D(&camera2D->position, 0, 0);    
     setVector2D(&camera2D->velocity, 1, 1);
@@ -41,7 +41,8 @@ void setCamera2DMoveKeys(Camera2D* camera2D, int keyUp, int keyRight, int keyDow
 void camera2DMoveUp(Camera2D* camera2D) {
     Vector2D pos = cloneVector2D(&camera2D->position);
     Vector2D dir = (Vector2D){0, 1};
-    dir = multiplyVector2D(&camera2D->velocity, &dir);
+    dir = multiplyVector2D(&camera2D->velocity, &dir);    
+    dir = multiplyVector2DByScalar(&dir, *camera2D->deltatime * 100.0f);
     pos = sumVector2D(&pos, &dir);
     setCamera2DPosition(camera2D, pos.x, pos.y);
 }
@@ -50,6 +51,7 @@ void camera2DMoveRight(Camera2D* camera2D) {
     Vector2D pos = cloneVector2D(&camera2D->position);
     Vector2D dir = (Vector2D){-1, 0};
     dir = multiplyVector2D(&camera2D->velocity, &dir);
+    dir = multiplyVector2DByScalar(&dir, *camera2D->deltatime * 100.0f);
     pos = sumVector2D(&pos, &dir);
     setCamera2DPosition(camera2D, pos.x, pos.y);
 }
@@ -58,6 +60,7 @@ void camera2DMoveDown(Camera2D* camera2D) {
     Vector2D pos = cloneVector2D(&camera2D->position);
     Vector2D dir = (Vector2D){0, -1};
     dir = multiplyVector2D(&camera2D->velocity, &dir);
+    dir = multiplyVector2DByScalar(&dir, *camera2D->deltatime * 100.0f);
     pos = sumVector2D(&pos, &dir);
     setCamera2DPosition(camera2D, pos.x, pos.y);
 }
@@ -66,6 +69,7 @@ void camera2DMoveLeft(Camera2D* camera2D) {
     Vector2D pos = cloneVector2D(&camera2D->position);
     Vector2D dir = (Vector2D){1, 0};
     dir = multiplyVector2D(&camera2D->velocity, &dir);
+    dir = multiplyVector2DByScalar(&dir, *camera2D->deltatime * 100.0f);
     pos = sumVector2D(&pos, &dir);
     setCamera2DPosition(camera2D, pos.x, pos.y);
 }

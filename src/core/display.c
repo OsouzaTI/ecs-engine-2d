@@ -143,6 +143,7 @@ void setDisplayTitle(Display* display, const char* title) {
 
 void setDisplayCamera2D(Display* display, int width, int height) {    
     display->Components.camera2D = createCamera2D(0, 0, width, height);
+    display->Components.camera2D->deltatime = &display->deltaTime;
 }
 
 void _updateMousePosition(Display* display) {

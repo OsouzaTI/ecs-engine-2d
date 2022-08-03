@@ -12,7 +12,7 @@
 #define RAT_SPRITE "ball"
 
 // população
-#define N_POPULATION 250
+#define N_POPULATION 2
 #define N_CROMOSSOMOS 600
 #define CROSS 0.35f
 #define MUTATION 0.03f

@@ -25,6 +25,7 @@ typedef struct camera2d
     Vector2D position;
     Vector2D velocity;
     float scale;
+    float* deltatime;
     int MOVE_KEYS[4]; 
 } Camera2D;
 
