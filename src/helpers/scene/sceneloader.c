@@ -147,6 +147,10 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                 fscanf(file, "%s", buffer);                
                 if (strcmp(buffer, "#SIZE") == 0){
                     fscanf(file, "%d", &SIZE);
+                } if (strcmp(buffer, "#CAMERA2D") == 0) {
+                    int x, y;
+                    float z;
+                    fscanf(file, "%d %d %f", &SIZE);
                 } else if(strcmp(buffer, "#OBJECT_START") == 0){
                     
                     ObjectSceneLoader* objectSceneLoader = createObjectSceneLoader();
@@ -213,7 +217,8 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
 
                     // adicionando object scene loader
                     addGenericHashNode(&objects, objectSceneLoader->token, (void*)objectSceneLoader);
-                } else if(strncmp(buffer, "*", 1) == 0){
+                } else if(strcmp(buffer, "#BEGIN_WORLD") == 0){
+                    fscanf(file, "%s", buffer); // vai pra linha abaixo
                     break;
                 }
             }
@@ -249,7 +254,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
 
                 // lendo o mapa linha a linha
                 fscanf(file, "%s", buffer);
-                if(strcmp(buffer, "MAP_END") == 0)
+                if(strcmp(buffer, "#END_WORLD") == 0)
                     break;
             }
 
