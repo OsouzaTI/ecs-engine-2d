@@ -7,6 +7,7 @@
 #include <core/display.h>
 
 #define SCALE_SPEED 0.1
+#define CONSTANT_SMOOTH_CAMERA 86.0f
 #define ENGINE_KEY_UP       0
 #define ENGINE_KEY_RIGHT    1
 #define ENGINE_KEY_DOWN     2
@@ -24,9 +25,11 @@ typedef struct camera2d
     SDL_Rect viewport;
     Vector2D position;
     Vector2D velocity;
+    int objectsToRender;
     float scale;
     float* deltatime;
     int MOVE_KEYS[4]; 
+    Vector2D* actor;
 } Camera2D;
 
 Camera2D* createCamera2D(int x, int y, int width, int height);
@@ -34,6 +37,8 @@ void setCamera2DPosition(Camera2D* camera2D, float x, float y);
 void setCamera2DVelocity(Camera2D* camera2D, float x, float y);
 void setCamera2DScale(Camera2D* camera2D, float x);
 void setCamera2DMoveKeys(Camera2D* camera2D, int keyUp, int keyRight, int keyDown, int keyLeft);
+
+void setCamera2DActor(Camera2D* camera2D, Vector2D* actor);
 
 void camera2DMoveUp(Camera2D* camera2D);
 void camera2DMoveRight(Camera2D* camera2D);
@@ -43,7 +48,10 @@ void camera2DMoveLeft(Camera2D* camera2D);
 void camera2DZoomIn(Camera2D* camera2D);
 void camera2DZoomOut(Camera2D* camera2D);
 
+int isInsideViewPort(Camera2D* camera2D, Vector2D position);
+
 void inputCamera2D(Camera2D* camera2D, SDL_Event* event);
 void updateCamera2D(Camera2D* camera2D, Display* display);
+void renderCamera2D(Camera2D* camera2D, Display* display);
 
 #endif

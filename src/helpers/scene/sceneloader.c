@@ -13,6 +13,7 @@ ObjectSceneLoader* createObjectSceneLoader() {
     objectSceneLoader->hasDirection = 0;
     objectSceneLoader->hasScale = 0;
     objectSceneLoader->hasAnimationSprite2D = 0;
+    objectSceneLoader->hasLayer = 0;
 
     objectSceneLoader->collisionTag = COLLISION_TAG_0;
     objectSceneLoader->renderBoxCollider2D = 0; 
@@ -45,9 +46,6 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
             boxCollider2D->collisionTags[i] = objectSceneLoader->collisionTags[i];
         }
     }
-
-    // setando sprite component
-    setObject2DSprite(display, object2D, getAsset(objectSceneLoader->spriteName));
    
     Vector2D* size = &objectSceneLoader->size;
     Vector2D* scale = &objectSceneLoader->scale;
@@ -63,6 +61,11 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
     // definindo escala
     if(objectSceneLoader->hasScale){
         setObject2DScale(object2D, scale->x, scale->y);
+    }
+
+    // definindo layer
+    if(objectSceneLoader->hasLayer){
+        object2D->layer = objectSceneLoader->layer;
     }
 
     // definindo posicao inicial
@@ -85,12 +88,15 @@ void objectSceneLoaderBindWithObject2D(Display* display, ObjectSceneLoader* obje
         setObject2DTokenIdentifier(object2D, objectSceneLoader->tokenIdentifier);
     }
 
+    // setando sprite component
+    setObject2DSprite(display, object2D, getAsset(objectSceneLoader->spriteName));
+
     // setando animação no sprite2D
     if(objectSceneLoader->hasAnimationSprite2D) {
         setObject2DAnimationSprite2D(
             object2D, 
-            objectSceneLoader->AnimationSprite2DHelper.speed,
-            objectSceneLoader->AnimationSprite2DHelper.frames
+            objectSceneLoader->AnimationSprite2DHelper.frames,
+            objectSceneLoader->AnimationSprite2DHelper.speed
         );
     }
 
@@ -109,7 +115,6 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
     
     char buffer[1024];
     while (1) {
-
         int res = fscanf(file, "%s", buffer);
         if (res == EOF)
             break;
@@ -135,7 +140,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
             char separator[2];
             fscanf(file, "%s", separator);
             setAssetPathSeparator(separator);            
-        } else if(strcmp(buffer, "MAP_START") == 0) {
+        } else if(strcmp(buffer, "MAP_BEGIN") == 0) {
             
             // helpers
             HashTable* objects = createHashTable(50);
@@ -147,14 +152,14 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                 fscanf(file, "%s", buffer);                
                 if (strcmp(buffer, "#SIZE") == 0){
                     fscanf(file, "%d", &SIZE);
-                } if (strcmp(buffer, "#CAMERA2D") == 0) {
+                } else if (strcmp(buffer, "#CAMERA2D") == 0) {
                     int x, y;
                     float z, w;
                     fscanf(file, "%d %d %f %f", &x, &y, &z, &w);
                     // setando a camera2d
                     setDisplayCamera2D(display, x, y);
                     setCamera2DVelocity(DPGC2D(display), z, w);
-                } else if(strcmp(buffer, "#OBJECT_START") == 0){
+                } else if(strcmp(buffer, "#OBJECT_BEGIN") == 0){
                     
                     ObjectSceneLoader* objectSceneLoader = createObjectSceneLoader();
                     
@@ -177,6 +182,9 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                             fscanf(file, "%f %f", &x, &y);
                             setVector2D(&objectSceneLoader->scale, x, y);
                             objectSceneLoader->hasScale = 1;
+                        } else if(strcmp(buffer, ">_LAYER") == 0){
+                            fscanf(file, "%d", &objectSceneLoader->layer);                            
+                            objectSceneLoader->hasLayer = 1;
                         } else if(strcmp(buffer, ">_POSITION") == 0){
                             float x, y;
                             fscanf(file, "%f %f", &x, &y);
@@ -220,8 +228,7 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
 
                     // adicionando object scene loader
                     addGenericHashNode(&objects, objectSceneLoader->token, (void*)objectSceneLoader);
-                } else if(strcmp(buffer, "#BEGIN_WORLD") == 0){
-                    fscanf(file, "%s", buffer); // vai pra linha abaixo
+                } else if(strcmp(buffer, "#WORLD_BEGIN") == 0){
                     break;
                 }
             }
@@ -229,7 +236,12 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
             // mapa de tamanho: WxW
             int width = -1;
             int line = 0;
-            while(1){
+            while(1) {
+                
+                fscanf(file, "%s", buffer);
+                if(strcmp(buffer, "#WORLD_END") == 0) {
+                    break;
+                }
                 
                 if(width == -1) {              
                     width = strlen(buffer);
@@ -255,11 +267,10 @@ void sceneLoader(ObjectManager* objectManager, Display* display, const char* fil
                 // incrementa o numero de linhas lidas
                 line++;
 
-                // lendo o mapa linha a linha
-                fscanf(file, "%s", buffer);
-                if(strcmp(buffer, "#END_WORLD") == 0)
-                    break;
             }
+
+            // ordena todos os objetos em ordem de layer
+            mergeSort(&objectManager->objects->head);
 
             freeHashTable(objects);
         }

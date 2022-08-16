@@ -9,16 +9,19 @@ build:
 	./src/helpers/scene/* \
 	./src/objects/* \
 	./src/main.c \
-	./src/rat.c \
-	./src/rat.h \
 	-I"src" \
-	-lm \
+	-I"C:\libsdl\include" \
+	-L"C:\libsdl\lib" \
+	-lmingw32 \
 	-lSDL2main \
 	-lSDL2 \
 	-lSDL2_ttf \
 	-lSDL2_image \
 	-lSDL2_mixer \
-	-o build
+	-o build.exe
 
 run:
-	./build
+	build.exe
+
+clear:
+	del *.exe && del tempCodeRunnerFile.py

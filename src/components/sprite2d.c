@@ -58,11 +58,14 @@ void renderSprite2D(Display* display, Sprite2D* sprite2D) {
     Vector2D* tfSize = getTransformSize(sprite2D->transform);
     Vector2D* tfScale = getTransformScale(sprite2D->transform);
     SDL_Rect* dst = &sprite2D->dstRect;
+    
     dst->x = tfPos->x;
     dst->y = tfPos->y;
     dst->w = tfSize->x * tfScale->x;
     dst->h = tfSize->y * tfScale->y;
-    renderTexture(display, sprite2D->texture, sprite2D->srcRect, sprite2D->dstRect, sprite2D->angle, 0);
+
+    SDL_Rect _dst = applyDisplayCamera2D(display, dst);
+    renderTexture(display, sprite2D->texture, sprite2D->srcRect, _dst, sprite2D->angle, 0);
 }
 
 void destroySprite2D(Sprite2D* sprite2D) {

@@ -17,17 +17,13 @@
 #define OBJ2DSSPR(x, y, z)  setSpriteObject2D(x, y, z)
 #define OBJ2DSBC(x)         setBoxCollider2D(x)
 
-
-// type of object2D
-typedef struct object2d Object2D;
-
 typedef struct object2d
 {
     int _objectType;
     int objectId;
     char tokenIdentifier[MAX_SIZE_TOKEN_IDENTIFIER];
     int renderCollider;
-    
+    int layer;
     // estrutura que pode armazenar a referencia de qualquer outra
     struct owner
     {
@@ -43,6 +39,7 @@ typedef struct object2d
 
     struct object2d_events
     {
+        ObjectInputCallback input;
         ObjectUpdateCallback update;
         ObjectBoxCollision2DEvent boxCollision2DEvent;
     } Events;      
@@ -55,6 +52,7 @@ void setObject2DSprite(Display* display, Object2D* object2D, const char* filePat
 void setBoxCollider2D(Object2D* object2D);
 void renderObject2D(Display* display, Object2D* object2D);
 
+void setObject2DInputCallback(Object2D* object2D, ObjectInputCallback input);
 void setObject2DUpdateCallback(Object2D* object2D, ObjectUpdateCallback update);
 void setObjectBoxCollision2DEvent(Object2D* object2D, ObjectBoxCollision2DEvent boxCollision2DEvent);
 // getter components

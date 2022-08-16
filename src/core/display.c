@@ -23,8 +23,9 @@ Display* createDisplay(SDL_Color* defaulClearColor) {
 
     // frame rate fix
     display->FPS = 0;           
-    display->frameRate = 1000.0f / 60;
-    display->previousFrameTime = 0;
+    display->frameRate = 60;
+    display->millisecsPerFrame = 1000 / display->frameRate;
+    display->millisecsPreviousFrame = 0;
     display->deltaTime = 0.0f;
     return display;
 }
@@ -86,7 +87,6 @@ int input(Display* display, InputCallbackEvent inputCallback){
     SDL_Event* event = &display->event;
     if(SDL_PollEvent(event)) 
     {
-        // printf("event: %d\n", event->type);
         if(event->type == SDL_QUIT)
             display->run = 0;
 
@@ -146,6 +146,20 @@ void setDisplayCamera2D(Display* display, int width, int height) {
     display->Components.camera2D->deltatime = &display->deltaTime;
 }
 
+SDL_Rect applyDisplayCamera2D(Display* display, SDL_Rect* r) {
+    Camera2D* camera = DPGC2D(display);
+    if(NOTNULL(camera)) {
+        return (SDL_Rect){
+            .x = r->x - camera->position.x,
+            .y = r->y - camera->position.y,
+            .w = r->w,
+            .h = r->h
+        };
+    } else {
+        return *r;
+    }
+}
+
 void _updateMousePosition(Display* display) {
     int mouse_x, mouse_y;
     SDL_GetMouseState(&mouse_x, &mouse_y);
@@ -158,8 +172,12 @@ void _updateMousePosition(Display* display) {
 }
 
 void _fixFrameRate(Display* display) {
-    while (!SDL_TICKS_PASSED(SDL_GetTicks(), display->previousFrameTime + display->frameRate));
-    display->deltaTime = (SDL_GetTicks() - display->previousFrameTime) / 1000.0f;
-    display->FPS = 1000.0f / (SDL_GetTicks() - display->previousFrameTime);
-    display->previousFrameTime = SDL_GetTicks();
+    int timeToWait = display->millisecsPerFrame - (SDL_GetTicks() - display->millisecsPreviousFrame);
+    if(timeToWait > 0 && timeToWait <= display->millisecsPerFrame) {
+        SDL_Delay(timeToWait);
+    }   
+
+    display->deltaTime = (SDL_GetTicks() - display->millisecsPreviousFrame) / 1000.0f;
+    display->FPS = 1000.0f / (SDL_GetTicks() - display->millisecsPreviousFrame);
+    display->millisecsPreviousFrame = SDL_GetTicks();
 }

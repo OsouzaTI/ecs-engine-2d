@@ -40,6 +40,14 @@ void setTransformDirection(Transform* transform, float x, float y);
 void setTransformAngle(Transform* transform, float angle);
 void setTransformScale(Transform* transform, float x, float y);
 
+void setTransformDirectionX(Transform* transform, float x);
+void setTransformDirectionY(Transform* transform, float y);
+void setTransformDirectionZero(Transform* transform);
+
+void setTransformVelocityX(Transform* transform, float x);
+void setTransformVelocityY(Transform* transform, float y);
+void setTransformVelocityZero(Transform* transform);
+
 Vector2D* getTransformSize(Transform* transform);
 Vector2D* getTransformPosition(Transform* transform);
 Vector2D* getTransformVelocity(Transform* transform);

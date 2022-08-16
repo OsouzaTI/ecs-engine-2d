@@ -20,7 +20,6 @@ typedef struct sprite2d
     SDL_Rect srcRect;
     SDL_Rect dstRect;
     float angle;
-    
     struct sprite2d_components
     {
         AnimationSprite2D* animation;        

@@ -126,6 +126,10 @@ void addGenericHashNode(HashTable** hashTable, const char* key, void* data) {
 }
 
 HashNode* findHashNode(HashTable* hashTable,const char* key){
+    if(ISNULL(hashTable)) {
+        return NULL;
+    }
+
     int code = stringHash(key, hashTable->N);    
     HashNode* hashNode = hashTable->data[code];  
     if(ISNULL(hashNode)) {

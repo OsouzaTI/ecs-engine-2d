@@ -7,10 +7,13 @@ Object2D* createObject2D(Display* display, float x, float y, int width, int heig
     object2D->_objectType = OBJECT2D;
     object2D->objectId = OBJECT_ID++;
     object2D->renderCollider = 0;
+    object2D->layer = 0;
+
     // inicializando identificador com vazio
     strcpy(object2D->tokenIdentifier, EMPTY_TOKEN_IDENTIFIER);
 
     // Events 
+    object2D->Events.input = NULL;
     object2D->Events.update = NULL;
     object2D->Events.boxCollision2DEvent = NULL;
     
@@ -19,6 +22,10 @@ Object2D* createObject2D(Display* display, float x, float y, int width, int heig
     object2D->Components.boxcollider2D = NULL;
     object2D->Components.sprite2D = NULL;    
     return object2D;
+}
+
+void setObject2DInputCallback(Object2D* object2D, ObjectInputCallback input) {
+    object2D->Events.input = input;
 }
 
 void setObject2DUpdateCallback(Object2D* object2D, ObjectUpdateCallback update) {

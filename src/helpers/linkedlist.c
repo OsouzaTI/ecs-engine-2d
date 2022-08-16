@@ -5,6 +5,7 @@ LinkedList* createLinkedList() {
     if(linkedlist == NULL){
         printf("Erro ao alocar memoria para lista lincada.\n");
     }
+    linkedlist->head = NULL;
     linkedlist->size = 0;
     return linkedlist;
 }

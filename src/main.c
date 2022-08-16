@@ -7,9 +7,7 @@
 #include <components/text2d.h>
 #include <core/object_manager.h>
 #include <helpers/scene/sceneloader.h>
-#include "rat.h"
 
-RatPopulation* ratPopulation = NULL;
 
 //-------- CALLBACK GAMELOOP ----------// 
 float globalScale = 1;
@@ -27,14 +25,7 @@ void inputCallback(SDL_Event* event) {
 void textUpdate(void* text2D, Display* display) {
     Text2D* text = (Text2D*)text2D;
     char buff[255];
-    sprintf(
-        buff, 
-        "Geracao: %d, Individuos: %d | Win rate: %.2f%% | Timer: %d s",
-        ratPopulation->generation,
-        N_POPULATION,
-        (ratPopulation->winners/(float)N_POPULATION)*100,
-        (int)difftime(time(NULL), ratPopulation->reset)
-    );
+    sprintf(buff, "FPS: %d", (int)display->FPS);
     setText2DText(display, text, buff);    
 }
 
@@ -43,38 +34,80 @@ void updateCallback(Display* display) {
     char buff[255];
     sprintf(buff, "FPS: %.3f", display->FPS);
     setDisplayTitle(display, buff);
-
-    if(ISNULL(ratPopulation)) {
-        ratPopulation = createRatPopulation(RANDOM_RAT);
-    } else {
-
-        if(difftime(time(NULL), ratPopulation->reset) > RESET_TIMER_SECONDS) {
-            generateNextRatPopulation(&ratPopulation);
-        } else if(ratPopulation->finish) {
-            generateNextRatPopulation(&ratPopulation);
-        }
-
-    }
-
 }
 
 //---------------------------------------//
 
+//--------- Player Update ---------------//
+void playerUpdate(void* player, Display* display) {
+    Transform* tf = OBJ2DGTF(player);
+    Vector2D* vel = TFGVEL(tf);
+    Vector2D* pos = TFGPOS(tf);
+    Vector2D* dir = TFGDIR(tf);
+    float deltaTime = display->deltaTime;
+
+    pos->x += vel->x * dir->x * deltaTime * 1.25f;
+    pos->y += vel->y * dir->y * deltaTime * 1.25f;
+}
+
+void playerInput(void* player, SDL_Event* event) {
+    Object2D* p = (Object2D*)player;
+    Transform* tf = OBJ2DGTF(player);  
+    if(event->type == SDL_KEYDOWN) {
+        switch (event->key.keysym.sym)
+        {
+            case SDLK_w: setTransformDirectionY(tf, -1);  break;            
+            case SDLK_a: setTransformDirectionX(tf, -1);  break;            
+            case SDLK_s: setTransformDirectionY(tf,  1);  break;            
+            case SDLK_d: setTransformDirectionX(tf,  1);  break;            
+            default: setTransformDirectionZero(tf); break;
+        }
+    } else if (event->type == SDL_KEYUP) {
+        switch (event->key.keysym.sym)
+        {
+            case SDLK_w: setTransformDirectionY(tf, 0);  break;            
+            case SDLK_a: setTransformDirectionX(tf, 0);  break;            
+            case SDLK_s: setTransformDirectionY(tf, 0);  break;            
+            case SDLK_d: setTransformDirectionX(tf, 0);  break;            
+            default: setTransformDirectionZero(tf); break;
+        }
+    }
+}
+
+void playerCollision(Object2D* player, CollisionEvent* collision, Display* display) {
+    Vector2D* n = &collision->normal;
+    Transform* tf = OBJ2DGTF(player);
+    Vector2D* pos = TFGPOS(tf);
+    Vector2D* vel = TFGVEL(tf);
+    
+    if(n->x < 0) pos->x += -1 * vel->x * display->deltaTime * 1.50f;
+    if(n->x > 0) pos->x +=  1 * vel->x * display->deltaTime * 1.50f;
+    if(n->y < 0) pos->y += -1 * vel->y * display->deltaTime * 1.50f;
+    if(n->y > 0) pos->y +=  1 * vel->y * display->deltaTime * 1.50f;
+    setTransformDirectionZero(tf);
+}
 
 int main(int argc, char *argv[]) {
 
     Display* display = initScreen("Teste", 640, 640);
-    // setDisplayCamera2D(display, 640, 640);
-    // setCamera2DVelocity(DPGC2D(display), 4, 4);
-    // setCamera2DMoveKeys(DPGC2D(display), SDLK_w, SDLK_d, SDLK_s, SDLK_a);
+    setDisplayCamera2D(display, 640, 640);
+    setCamera2DVelocity(DPGC2D(display), 4, 4);
+    setCamera2DMoveKeys(DPGC2D(display), SDLK_w, SDLK_d, SDLK_s, SDLK_a);
 
     ObjectManager* objectManager = createObjectManager(display);
     
     sceneLoader(objectManager, display, "scene.txt");  
     
-    initializeObjects2D(objectManager);
+    Object2D* player = getObject2DByTokenIdentifier(objectManager, "player");
+    if(NOTNULL(player)) {
+        setCamera2DActor(DPGC2D(display), TFGPOS(OBJ2DGTF(player)));
+        setObject2DInputCallback(player, playerInput);
+        setObject2DUpdateCallback(player, playerUpdate);
+        setObjectBoxCollision2DEvent(player, playerCollision);
+        (OBJ2DGBC(player))->scale = 2/4.0f;
+    }
 
-    Text2D* text = createText2D(display, "...", 10, 600, 360, 24);
+    Text2D* text = createText2D(display, "...", 10, 600, 120, 24);
     setText2DUpdateCallback(text, textUpdate);
     addObjectToManager(objectManager, VOID(text));
 
@@ -96,14 +129,9 @@ int main(int argc, char *argv[]) {
         // input callback
         input(display, inputCallback);
         // update callback
-        update(display, updateCallback);        
-        // update object manager
-        updateAllObjectsInManager(objectManager);        
-        // render object manager
-        renderAllObjectsInManager(objectManager);
-
-        SDL_RenderSetScale(display->renderer, globalScale, globalScale);
-
+        update(display, updateCallback);   
+        // process all objects events/inputs and render
+        processAllObjectsInManager(objectManager);
         // chamadas de renderização        
         render(display);       
     }

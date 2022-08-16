@@ -9,6 +9,7 @@
 #include <objects/object2d.h>
 #include <helpers/hashtable.h>
 #include <helpers/vector2d.h>
+#include <helpers/sort.h>
 
 typedef struct object_scene_loader
 {
@@ -20,6 +21,7 @@ typedef struct object_scene_loader
     int hasAnimationSprite2D;
     int hasBoxCollider2D;
     int hasTokenIdentifier;
+    int hasLayer;
     Vector2D size;
     Vector2D scale;
     Vector2D position;
@@ -31,7 +33,7 @@ typedef struct object_scene_loader
     int renderBoxCollider2D;
     int collisionTag;
     int collisionTags[N_COLLISION_TAGS];
-    
+    int layer;
     // helpers
     struct animation_sprite2d_helper
     {

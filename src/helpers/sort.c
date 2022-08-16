@@ -72,6 +72,73 @@ void quickSortDPointer(void** V, int lo, int hi, ComparationSortFunction cmp, Sw
     quickSortDPointer(V, p + 1, hi, cmp, swp);
 }
 
+void mergeSort(Node** headRef) {
+    Node* head = *headRef;
+    Node* a;
+    Node* b;
+  
+    /* Base case -- length 0 or 1 */
+    if ((head == NULL) || (head->next == NULL)) {
+        return;
+    }
+  
+    /* Split head into 'a' and 'b' sublists */
+    frontBackSplit(head, &a, &b);
+  
+    /* Recursively sort the sublists */
+    mergeSort(&a);
+    mergeSort(&b);
+  
+    /* answer = merge the two sorted lists together */
+    *headRef = sortedMerge(a, b);
+}
+
+
+Node* sortedMerge(Node* a, Node* b){
+    Node* result = NULL;
+  
+    /* Base cases */
+    if (a == NULL)
+        return (b);
+    else if (b == NULL)
+        return (a);
+  
+    /* Pick either a or b, and recur */
+    Object2D* _a = (Object2D*)a->data;
+    Object2D* _b = (Object2D*)b->data;
+    if (_a->layer <= _b->layer) {
+        result = a;
+        result->next = sortedMerge(a->next, b);
+    }
+    else {
+        result = b;
+        result->next = sortedMerge(a, b->next);
+    }
+    return (result);        
+}
+
+void frontBackSplit(Node* source, Node** frontRef, Node** backRef) {
+    Node* fast;
+    Node* slow;
+    slow = source;
+    fast = source->next;
+  
+    /* Advance 'fast' two nodes, and advance 'slow' one node */
+    while (fast != NULL) {
+        fast = fast->next;
+        if (fast != NULL) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+    }
+  
+    /* 'slow' is before the midpoint in the list, so split it in two 
+    at that point. */
+    *frontRef = source;
+    *backRef = slow->next;
+    slow->next = NULL;
+}
+
 #ifdef SORT_DEBUG
 typedef struct teste
 {

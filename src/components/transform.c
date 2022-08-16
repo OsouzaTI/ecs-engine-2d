@@ -48,6 +48,34 @@ void setTransformScale(Transform* transform, float x, float y) {
     setVector2D(&transform->scale, x, y);
 }
 
+void setTransformDirectionX(Transform* transform, float x) {
+    Vector2D* d = &transform->direction;
+    setVector2D(&transform->direction, x, d->y);
+}
+
+void setTransformDirectionY(Transform* transform, float y) {
+    Vector2D* d = &transform->direction;
+    setVector2D(&transform->direction, d->x, y);
+}
+
+void setTransformDirectionZero(Transform* transform) {
+    setVector2D(&transform->direction, 0, 0);
+}
+
+void setTransformVelocityX(Transform* transform, float x) {
+    Vector2D* v = &transform->velocity;
+    setVector2D(&transform->velocity, x, v->y);
+}
+
+void setTransformVelocityY(Transform* transform, float y) {
+    Vector2D* v = &transform->velocity;
+    setVector2D(&transform->velocity, v->x, y);
+}
+
+void setTransformVelocityZero(Transform* transform) {
+    setVector2D(&transform->velocity, 0, 0);
+}
+
 Vector2D* getTransformSize(Transform* transform){
     return &transform->size;
 }

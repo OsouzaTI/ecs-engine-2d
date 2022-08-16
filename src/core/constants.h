@@ -44,6 +44,7 @@ typedef struct collision_event CollisionEvent;
 
 typedef void(*InputCallbackEvent)(SDL_Event*);
 typedef void(*UpdateCallbackEvent)(Display*);
-typedef void(*ObjectBoxCollision2DEvent)(Object2D*, CollisionEvent*);
+typedef void(*ObjectBoxCollision2DEvent)(Object2D*, CollisionEvent*, Display*);
+typedef void(*ObjectInputCallback)(void*, SDL_Event*);
 typedef void(*ObjectUpdateCallback)(void*, Display*);
 #endif

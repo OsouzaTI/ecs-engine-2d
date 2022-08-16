@@ -36,8 +36,9 @@ typedef struct display {
     // frame rate in runtime
     float FPS;
     // frame rate esperado default(60)
-    float frameRate;
-    int previousFrameTime;
+    int frameRate;
+    int millisecsPerFrame;
+    int millisecsPreviousFrame;
     float deltaTime;
 } Display;
 
@@ -103,6 +104,7 @@ Camera2D* getDisplayCamera2D(Display* display);
 void setClearColor(Display* display, uint8_t r, uint8_t g, uint8_t b, uint8_t a);
 void setDisplayTitle(Display* display, const char* title);
 void setDisplayCamera2D(Display* display, int width, int height);
+SDL_Rect applyDisplayCamera2D(Display* display, SDL_Rect* r);
 
 void _updateMousePosition(Display* display);
 void _fixFrameRate(Display* display);

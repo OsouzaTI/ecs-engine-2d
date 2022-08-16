@@ -12,6 +12,7 @@ typedef struct boxcollider2D
 {
     int tag;
     int collisionTags[N_COLLISION_TAGS];
+    float scale;
     Transform* transform;
     SDL_Rect rect;
     SDL_Color color;

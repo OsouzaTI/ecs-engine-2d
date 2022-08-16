@@ -56,7 +56,9 @@ void renderText2D(Display* display, Text2D* text2D){
         .w = text2D->size.x,
         .h = text2D->size.y
     };
-    SDL_RenderCopy(display->renderer, text2D->textureText, NULL, &rect);
+
+    SDL_Rect _dst = applyDisplayCamera2D(display, &rect);
+    SDL_RenderCopy(display->renderer, text2D->textureText, NULL, &_dst);
 }
 
 int text2dMemoryAllocated(Text2D* text2D) {

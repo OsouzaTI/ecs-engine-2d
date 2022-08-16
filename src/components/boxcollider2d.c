@@ -6,8 +6,13 @@ BoxCollider2D* createBoxCollider2D(Transform* transform) {
 
     boxcollider2D->transform = transform;
     boxcollider2D->tag = COLLISION_TAG_0;
+    boxcollider2D->scale = 1.0f;
     boxcollider2D->color = (SDL_Color){0, 255, 0, 255};
-    boxcollider2D->_defaultColor = boxcollider2D->color;
+    boxcollider2D->_defaultColor = boxcollider2D->color;    
+    
+    // update boxCollider    
+    updateBoxCollider2D(boxcollider2D);
+    
     // inicializando vetor de colisoes
     for (int i = 0; i < N_COLLISION_TAGS; i++)
     {
@@ -22,10 +27,17 @@ void updateBoxCollider2D(BoxCollider2D* boxcollider2D) {
     Vector2D* tfSize = getTransformSize(tfBoxCollide2D);
     Vector2D* tfScale = getTransformScale(tfBoxCollide2D);
 
-    boxcollider2D->rect.w = (int)(tfSize->x * tfScale->x);
-    boxcollider2D->rect.h = (int)(tfSize->y * tfScale->y);
-    boxcollider2D->rect.x = (int)(tfPos->x);
-    boxcollider2D->rect.y = (int)(tfPos->y);
+    boxcollider2D->rect.w = (int)(tfSize->x * tfScale->x) * boxcollider2D->scale;
+    boxcollider2D->rect.h = (int)(tfSize->y * tfScale->y) * boxcollider2D->scale;
+    if(boxcollider2D->scale != 1) {
+        float factorX = (int)(tfSize->x * tfScale->x) / boxcollider2D->rect.w; 
+        float factorY = (int)(tfSize->y * tfScale->y) / boxcollider2D->rect.h;
+        boxcollider2D->rect.x = (int)(tfPos->x) + ((int)(tfSize->x * tfScale->x) / factorX);
+        boxcollider2D->rect.y = (int)(tfPos->y) + ((int)(tfSize->y * tfScale->y) / factorY);
+    } else {
+        boxcollider2D->rect.x = (int)(tfPos->x);
+        boxcollider2D->rect.y = (int)(tfPos->y);
+    }
 }
 
 void destroyBoxCollider2D(BoxCollider2D* boxcollider2D) {
@@ -36,8 +48,10 @@ void destroyBoxCollider2D(BoxCollider2D* boxcollider2D) {
 void renderBoxCollider2D(Display* display, BoxCollider2D* boxcollider2D) {
     SDL_Color* boxColor = &boxcollider2D->color;
     setClearColor(display, boxColor->r, boxColor->g, boxColor->b, boxColor->a);
-    SDL_RenderDrawRect(display->renderer, &boxcollider2D->rect);
-
+    
+    SDL_Rect dst = applyDisplayCamera2D(display, &boxcollider2D->rect);
+    SDL_RenderDrawRect(display->renderer, &dst);
+    
     // reset default attributes post-render
     _resetBoxCollider2DDefaultColor(boxcollider2D);
 }
@@ -99,9 +113,9 @@ CollisionEvent boxCollision2D(BoxCollider2D* a, BoxCollider2D* b) {
 
     Vector2D normal;
     int offset = 4;
-    if(axw > bx && ayh > by && ax < bxw && ay < byh) {
+    if((axw > bx && ax < bxw) && (ayh > by && ay < byh)) {
         collisionEvent.hasCollision = 1;
-
+        
         if(axw - offset <= bx) {
             setVector2D(&normal, -1, 0);
         } else if(ax + offset >= bxw) {

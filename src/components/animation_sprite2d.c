@@ -4,8 +4,8 @@ AnimationSprite2D* createAnimationSprite2D(Sprite2D* sprite2D, int frames, float
     AnimationSprite2D* animationSprite2D = (AnimationSprite2D*)malloc(sizeof(AnimationSprite2D));
     ALLOCATE_MEMORY_ERROR(animationSprite2D, "AnimationSprite2D");
 
-    animationSprite2D->speed = speed;
     animationSprite2D->frames = frames;
+    animationSprite2D->speed = speed;
     animationSprite2D->currentFrame = 0;
     animationSprite2D->currentIndex = 0;
     animationSprite2D->loop = 1;
@@ -33,13 +33,13 @@ void updateAnimationSprite2D(AnimationSprite2D* animationSprite2D)
     int frames = animationSprite2D->frames;
     int currentFrame = animationSprite2D->currentFrame;
 
-    int frame = (int)((SDL_GetTicks()/1000) * speed) % frames;
+    int frame = (int)(SDL_GetTicks() * speed * 0.01f) % frames;
     animationSprite2D->currentFrame = frame;    
     if(!animationSprite2D->loop && (currentFrame < frames - 1)) {
         animationSprite2D->currentFrame = frame;    
     }
-    sprite2D->srcRect.y = sprite2D->srcRect.h * animationSprite2D->currentIndex;
     sprite2D->srcRect.x = sprite2D->srcRect.w * animationSprite2D->currentFrame;
+    sprite2D->srcRect.y = sprite2D->srcRect.h * animationSprite2D->currentIndex;
 }
 
 void destroyAnimationSprite2D(AnimationSprite2D** animationSprite2D) {
